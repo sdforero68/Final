@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nosotros - Anita Integrales</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/styles.css" />
+  <link rel="stylesheet" href="../../css/pages/about/index.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="container px-4 nav-inner">
+      <div class="brand-group" onclick="window.location.href='../../index.html'">
+        <div class="brand-avatar" style="border-color: var(--color-accent)">
+          <img src="../../assets/images/Logo/Logo.jpeg" alt="Anita Integrales" class="brand-avatar-img" />
+        </div>
+        <div class="brand-text">
+          <div class="brand brand-font gradient-text text-3xl">Anita Integrales</div>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="../../index.html" class="nav-link">Inicio</a>
+        <a href="../catalog/index.html" class="nav-link">Catálogo</a>
+        <a href="../markets/index.html" class="nav-link">Mercados Campesinos</a>
+        <a href="../about/index.html" class="nav-link active">Nosotros</a>
+        <a href="../contact/index.html" class="nav-link">Contacto</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="icon-btn" data-action="cart" aria-label="Carrito">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-secondary)">
+            <circle cx="9" cy="21" r="1"/>
+            <circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          <span class="badge" id="cart-badge" hidden>0</span>
+        </button>
+        <div class="user-menu-wrapper">
+          <button class="icon-btn" data-action="user" aria-label="Usuario" id="user-menu-btn">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-secondary)">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </button>
+          <div class="user-menu-dropdown" id="user-menu" hidden>
+            <div class="user-menu-header">
+              <div class="user-menu-avatar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+              </div>
+              <div class="user-menu-info">
+                <p class="user-menu-name" id="user-menu-name">Usuario</p>
+                <p class="user-menu-email" id="user-menu-email">-</p>
+              </div>
+            </div>
+            <div class="user-menu-divider"></div>
+            <a href="../profile/index.html" class="user-menu-item" id="user-menu-profile">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              <span>Mi Perfil</span>
+            </a>
+            <button class="user-menu-item user-menu-logout" id="logout-btn-navbar">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                <polyline points="16 17 21 12 16 7"/>
+                <line x1="21" y1="12" x2="9" y2="12"/>
+              </svg>
+              <span>Cerrar Sesión</span>
+            </button>
+            <!-- Opciones para usuarios no logueados -->
+            <a href="../login/index.html" class="user-menu-item" id="user-menu-login" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                <polyline points="10 17 15 12 10 7"/>
+                <line x1="15" y1="12" x2="3" y2="12"/>
+              </svg>
+              <span>Iniciar Sesión</span>
+            </a>
+            <a href="../login/index.html?register=true" class="user-menu-item" id="user-menu-register" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <line x1="19" y1="8" x2="19" y2="14"/>
+                <line x1="22" y1="11" x2="16" y2="11"/>
+              </svg>
+              <span>Registrarse</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="w-full relative overflow-hidden" style="background: #FDF5E6;">
+    <!-- Barra decorativa vertical -->
+    <div class="decorative-bar"></div>
+    
+    <!-- Nuestra Historia Section -->
+    <section class="about-hero-section relative pt-12 pb-12 px-4" style="min-height: 90vh;">
+      <div class="container mx-auto max-w-7xl relative z-10">
+        <!-- Top Left: Texto principal -->
+        <div class="hero-content mb-16 md:mb-0 animate-fade-in-up">
+          <h1 class="hero-title mb-6">
+            <span style="color: var(--color-tertiary);">El Comienzo de</span>
+            <span class="highlight-text" style="color: var(--color-accent);">un Sueño</span>
+          </h1>
+          <!-- Texto descriptivo -->
+          <div class="hero-description max-w-2xl mb-8">
+            <p class="text-base leading-relaxed mb-4" style="color: var(--color-tertiary);">
+              Soy una mujer emprendedora, con sueños cumplidos y muchos otros por cumplir.
+            </p>
+            <p class="text-base leading-relaxed mb-4" style="color: var(--color-tertiary);">
+              Un día, en mi casa en el campo, tuve un accidente que afectó mi brazo, y de ese momento difícil nació una nueva oportunidad.
+            </p>
+            <p class="text-base leading-relaxed mb-4" style="color: var(--color-tertiary);">
+              Para recuperar la movilidad me recomendaron amasar, y lo que comenzó como una terapia se convirtió en una pasión: crear productos saludables, hechos con conciencia, dedicación y alma.
+            </p>
+            <p class="text-base leading-relaxed mb-4" style="color: var(--color-tertiary);">
+              Hoy, más que pan, ofrecemos bienestar, tradición y una conexión profunda con nuestro territorio. Nuestros productos están cuidadosamente elaborados con ingredientes integrales, ecológicos y de primera calidad, para compartir el sabor auténtico del pan hecho con amor.
+            </p>
+            <p class="quote-highlight italic font-bold" style="color: var(--color-primary);">
+              Termino creyendo que, cuando Dios quiere que sus hijos cambien, de alguna forma los hace cambiar… siempre para mejor.
+            </p>
+          </div>
+        </div>
+
+        <!-- Top Right: Imágenes decorativas -->
+        <div class="hero-images animate-fade-in-up">
+          <!-- Decoración: Asterisco -->
+          <div class="decorative-asterisk asterisk-1 animate-float">✦</div>
+          <div class="decorative-asterisk asterisk-2 animate-float">✦</div>
+          
+          <!-- Línea decorativa -->
+          <svg class="decorative-line line-1" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,25 Q50,10 100,25 T200,25" stroke="var(--color-accent)" stroke-width="3" fill="none"/>
+          </svg>
+          
+          <!-- Imagen principal con fondo de color -->
+          <div class="hero-image-card image-card-1">
+            <div class="image-bg" style="background-color: #FDF5E6;"></div>
+            <img 
+              src="../../assets/images/about/Anita3.jpeg" 
+              alt="Anita, fundadora de Anita Integrales" 
+              class="hero-img"
+              onerror="this.src='../../assets/images/placeholder.svg'"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Nuestro Compromiso Section -->
+    <section class="commitment-section relative px-4" style="background: linear-gradient(135deg, #FDF5E6 0%, #FDF5E650 100%); padding-top: 1.5rem; padding-bottom: 1.5rem;">
+      <div class="container mx-auto max-w-7xl relative z-10">
+        <div class="commitment-layout">
+          <!-- Imagen izquierda -->
+          <div class="commitment-image-left animate-fade-in-up">
+            <div class="commitment-image-card img-card-1">
+              <div class="image-bg" style="background-color: var(--color-primary);"></div>
+              <img 
+                src="../../assets/images/about/Anita1.jpeg" 
+                alt="Anita Integrales" 
+                class="commitment-img"
+                onerror="this.src='../../assets/images/placeholder.svg'"
+              />
+            </div>
+          </div>
+
+          <!-- Texto en el centro -->
+          <div class="commitment-content animate-fade-in-up">
+            <h2 class="commitment-title mb-6">
+              Bienvenido a <span class="highlight-text" style="color: var(--color-primary);">Anita Integrales</span>
+            </h2>
+            <div class="commitment-text">
+              <p class="text-base leading-relaxed mb-4" style="color: var(--color-tertiary);">
+                En Anita Integrales, nos comprometemos a ofrecer productos elaborados con ingredientes naturales y saludables. Utilizamos harinas ancestrales como quinua, amaranto y sagú, así como semillas nutritivas como linaza y chía.
+              </p>
+              <p class="text-base leading-relaxed mb-4" style="color: var(--color-tertiary);">
+                Cada producto es artesanal, elaborado a mano con recetas tradicionales y técnicas de masa madre que garantizan un sabor excepcional y beneficios para la salud.
+              </p>
+              <p class="text-base leading-relaxed" style="color: var(--color-tertiary);">
+                Creemos que la comida es medicina, y por eso seleccionamos cuidadosamente cada ingrediente para ofrecerte lo mejor de la naturaleza.
+              </p>
+            </div>
+          </div>
+
+          <!-- Imagen derecha -->
+          <div class="commitment-image-right animate-fade-in-up">
+            <div class="commitment-image-card img-card-2">
+              <div class="image-bg" style="background-color: var(--color-accent);"></div>
+              <img 
+                src="../../assets/images/about/Anita2.jpeg" 
+                alt="Anita Integrales" 
+                class="commitment-img"
+                onerror="this.src='../../assets/images/placeholder.svg'"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ingredientes Especiales Section -->
+    <section class="ingredients-section container mx-auto px-4 relative" style="padding-top: 2rem; padding-bottom: 4rem;">
+      <h2 class="text-center text-5xl font-bold mb-12 animate-on-scroll float-up" style="color: var(--color-primary)">Ingredientes Especiales</h2>
+      <div class="ingredients-matrix max-w-7xl mx-auto">
+        <!-- Fila 1 -->
+        <div class="ingredients-row">
+          <div class="ingredient-flip-card animate-on-scroll fade-in-scale">
+            <div class="ingredient-flip-card-inner">
+              <div class="ingredient-flip-card-front" style="background: linear-gradient(135deg, var(--color-primary) 0%, #d4a574 100%);">
+                <h3 class="ingredient-flip-title">Quinua</h3>
+              </div>
+              <div class="ingredient-flip-card-back" style="background: linear-gradient(135deg, #fff8f0 0%, #FDF5E6 100%);">
+                <p class="ingredient-flip-benefit">Proteína completa</p>
+              </div>
+            </div>
+          </div>
+          <div class="ingredient-flip-card animate-on-scroll fade-in-scale" style="--delay: 0.1s;">
+            <div class="ingredient-flip-card-inner">
+              <div class="ingredient-flip-card-front" style="background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-secondary) 100%);">
+                <h3 class="ingredient-flip-title">Yacón</h3>
+              </div>
+              <div class="ingredient-flip-card-back" style="background: linear-gradient(135deg, #fff8f0 0%, #FDF5E6 100%);">
+                <p class="ingredient-flip-benefit">Prebiótico natural</p>
+              </div>
+            </div>
+          </div>
+          <div class="ingredient-flip-card animate-on-scroll fade-in-scale" style="--delay: 0.2s;">
+            <div class="ingredient-flip-card-inner">
+              <div class="ingredient-flip-card-front" style="background: linear-gradient(135deg, var(--color-tertiary) 0%, var(--color-primary) 100%);">
+                <h3 class="ingredient-flip-title">Linaza</h3>
+              </div>
+              <div class="ingredient-flip-card-back" style="background: linear-gradient(135deg, #fff8f0 0%, #FDF5E6 100%);">
+                <p class="ingredient-flip-benefit">Omega 3</p>
+              </div>
+            </div>
+          </div>
+          <div class="ingredient-flip-card animate-on-scroll fade-in-scale" style="--delay: 0.3s;">
+            <div class="ingredient-flip-card-inner">
+              <div class="ingredient-flip-card-front" style="background: linear-gradient(135deg, var(--color-primary) 0%, #d4a574 100%);">
+                <h3 class="ingredient-flip-title">Amaranto</h3>
+              </div>
+              <div class="ingredient-flip-card-back" style="background: linear-gradient(135deg, #fff8f0 0%, #FDF5E6 100%);">
+                <p class="ingredient-flip-benefit">Rico en calcio</p>
+              </div>
+            </div>
+          </div>
+          <div class="ingredient-flip-card animate-on-scroll fade-in-scale" style="--delay: 0.4s;">
+            <div class="ingredient-flip-card-inner">
+              <div class="ingredient-flip-card-front" style="background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-secondary) 100%);">
+                <h3 class="ingredient-flip-title">Centeno</h3>
+              </div>
+              <div class="ingredient-flip-card-back" style="background: linear-gradient(135deg, #fff8f0 0%, #FDF5E6 100%);">
+                <p class="ingredient-flip-benefit">Alto en fibra</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Fila 2 -->
+        <div class="ingredients-row">
+          <div class="ingredient-flip-card animate-on-scroll fade-in-scale">
+            <div class="ingredient-flip-card-inner">
+              <div class="ingredient-flip-card-front" style="background: linear-gradient(135deg, var(--color-tertiary) 0%, var(--color-primary) 100%);">
+                <h3 class="ingredient-flip-title">Chía</h3>
+              </div>
+              <div class="ingredient-flip-card-back" style="background: linear-gradient(135deg, #fff8f0 0%, #FDF5E6 100%);">
+                <p class="ingredient-flip-benefit">Antioxidantes</p>
+              </div>
+            </div>
+          </div>
+          <div class="ingredient-flip-card animate-on-scroll fade-in-scale" style="--delay: 0.1s;">
+            <div class="ingredient-flip-card-inner">
+              <div class="ingredient-flip-card-front" style="background: linear-gradient(135deg, var(--color-primary) 0%, #d4a574 100%);">
+                <h3 class="ingredient-flip-title">Sagú</h3>
+              </div>
+              <div class="ingredient-flip-card-back" style="background: linear-gradient(135deg, #fff8f0 0%, #FDF5E6 100%);">
+                <p class="ingredient-flip-benefit">Sin gluten</p>
+              </div>
+            </div>
+          </div>
+          <div class="ingredient-flip-card animate-on-scroll fade-in-scale" style="--delay: 0.2s;">
+            <div class="ingredient-flip-card-inner">
+              <div class="ingredient-flip-card-front" style="background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-secondary) 100%);">
+                <h3 class="ingredient-flip-title">Masa Madre</h3>
+              </div>
+              <div class="ingredient-flip-card-back" style="background: linear-gradient(135deg, #fff8f0 0%, #FDF5E6 100%);">
+                <p class="ingredient-flip-benefit">Digestión lenta</p>
+              </div>
+            </div>
+          </div>
+          <div class="ingredient-flip-card animate-on-scroll fade-in-scale" style="--delay: 0.3s;">
+            <div class="ingredient-flip-card-inner">
+              <div class="ingredient-flip-card-front" style="background: linear-gradient(135deg, var(--color-tertiary) 0%, var(--color-primary) 100%);">
+                <h3 class="ingredient-flip-title">Avena</h3>
+              </div>
+              <div class="ingredient-flip-card-back" style="background: linear-gradient(135deg, #fff8f0 0%, #FDF5E6 100%);">
+                <p class="ingredient-flip-benefit">Beta-glucanos</p>
+              </div>
+            </div>
+          </div>
+          <div class="ingredient-flip-card animate-on-scroll fade-in-scale" style="--delay: 0.4s;">
+            <div class="ingredient-flip-card-inner">
+              <div class="ingredient-flip-card-front" style="background: linear-gradient(135deg, var(--color-primary) 0%, #d4a574 100%);">
+                <h3 class="ingredient-flip-title">Trigo Integral</h3>
+              </div>
+              <div class="ingredient-flip-card-back" style="background: linear-gradient(135deg, #fff8f0 0%, #FDF5E6 100%);">
+                <p class="ingredient-flip-benefit">Fibra dietética</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Galería de Fotos Section -->
+    <section class="gallery-section container mx-auto px-4 relative" style="padding-top: 4rem; padding-bottom: 4rem; background: linear-gradient(135deg, #FDF5E6 0%, #fff8f0 100%);">
+      <h2 class="text-center text-5xl font-bold mb-12 brand-font" style="color: var(--color-tertiary); font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 800;">Nuestra Galería</h2>
+      <div class="gallery-container max-w-7xl mx-auto">
+        <div class="gallery-grid-compact">
+          <div class="gallery-item-compact">
+            <img src="../../assets/images/Galeria/galeria01.jpeg" alt="Galería 1" class="gallery-image-compact" loading="lazy" />
+          </div>
+          <div class="gallery-item-compact">
+            <img src="../../assets/images/Galeria/galeria02.jpeg" alt="Galería 2" class="gallery-image-compact" loading="lazy" />
+          </div>
+          <div class="gallery-item-compact">
+            <img src="../../assets/images/Galeria/galeria03.jpeg" alt="Galería 3" class="gallery-image-compact" loading="lazy" />
+          </div>
+          <div class="gallery-item-compact">
+            <img src="../../assets/images/Galeria/galeria04.jpeg" alt="Galería 4" class="gallery-image-compact" loading="lazy" />
+          </div>
+          <div class="gallery-item-compact">
+            <img src="../../assets/images/Galeria/galeria05.jpeg" alt="Galería 5" class="gallery-image-compact" loading="lazy" />
+          </div>
+          <div class="gallery-item-compact">
+            <img src="../../assets/images/Galeria/galeria06.jpeg" alt="Galería 6" class="gallery-image-compact" loading="lazy" />
+          </div>
+          <div class="gallery-item-compact">
+            <img src="../../assets/images/Galeria/galeria07.jpeg" alt="Galería 7" class="gallery-image-compact" loading="lazy" />
+          </div>
+          <div class="gallery-item-compact">
+            <img src="../../assets/images/Galeria/galeria08.jpeg" alt="Galería 8" class="gallery-image-compact" loading="lazy" />
+          </div>
+          <div class="gallery-item-compact">
+            <img src="../../assets/images/Galeria/galeria09.jpeg" alt="Galería 9" class="gallery-image-compact" loading="lazy" />
+          </div>
+          <div class="gallery-item-compact">
+            <img src="../../assets/images/Galeria/galeria10.jpeg" alt="Galería 10" class="gallery-image-compact" loading="lazy" />
+          </div>
+          <div class="gallery-item-compact">
+            <img src="../../assets/images/Galeria/galeria11.jpeg" alt="Galería 11" class="gallery-image-compact" loading="lazy" />
+          </div>
+          <div class="gallery-item-compact">
+            <img src="../../assets/images/Galeria/galeria12.jpeg" alt="Galería 12" class="gallery-image-compact" loading="lazy" />
+          </div>
+          <div class="gallery-item-compact">
+            <img src="../../assets/images/Galeria/galeria13.jpeg" alt="Galería 13" class="gallery-image-compact" loading="lazy" />
+          </div>
+          <div class="gallery-item-compact">
+            <img src="../../assets/images/Galeria/galeria14.jpeg" alt="Galería 14" class="gallery-image-compact" loading="lazy" />
+          </div>
+          <div class="gallery-item-compact">
+            <img src="../../assets/images/Galeria/galeria15.jpeg" alt="Galería 15" class="gallery-image-compact" loading="lazy" />
+          </div>
+          <div class="gallery-item-compact">
+            <img src="../../assets/images/Galeria/galeria16.jpeg" alt="Galería 16" class="gallery-image-compact" loading="lazy" />
+          </div>
+          <div class="gallery-item-compact">
+            <img src="../../assets/images/Galeria/galeria17.jpeg" alt="Galería 17" class="gallery-image-compact" loading="lazy" />
+          </div>
+          <div class="gallery-item-compact">
+            <img src="../../assets/images/Galeria/galeria18.jpeg" alt="Galería 18" class="gallery-image-compact" loading="lazy" />
+          </div>
+          <div class="gallery-item-compact">
+            <img src="../../assets/images/Galeria/galeria19.jpeg" alt="Galería 19" class="gallery-image-compact" loading="lazy" />
+          </div>
+          <div class="gallery-item-compact">
+            <img src="../../assets/images/Galeria/galeria20.jpeg" alt="Galería 20" class="gallery-image-compact" loading="lazy" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Cart Drawer (Floating Cart) -->
+  <div id="cart-drawer" class="cart-drawer" hidden>
+    <div class="cart-drawer-overlay" id="cart-drawer-overlay"></div>
+    <div class="cart-drawer-content">
+      <div class="cart-drawer-header">
+        <h2 class="cart-drawer-title">Tu carrito</h2>
+        <button class="cart-drawer-close" id="cart-drawer-close" aria-label="Cerrar carrito">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="cart-drawer-body" id="cart-drawer-body">
+        <!-- El contenido se llenará dinámicamente -->
+      </div>
+      <div class="cart-drawer-footer" id="cart-drawer-footer">
+        <!-- El footer se llenará dinámicamente -->
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../../js/cart-menu.js"></script>
+  <script type="module" src="../../js/cart-drawer.js"></script>
+  <script type="module" src="../../js/user-menu.js"></script>
+  <script type="module" src="../../js/sync.js"></script>
+  <script type="module" src="../../js/main.js"></script>
+  <script type="module" src="../../js/animations.js"></script>
+  <script type="module" src="../../js/pages/about/index.js"></script>
+  <script src="../../js/button-hover.js"></script>
+  
+  <!-- WhatsApp Button -->
+  <a
+    href="https://wa.me/573222225271?text=Hola%21%20me%20gustaría%20obtener%20más%20información%20acerca%20de%20los%20productos%20de%20Anita%20Integrales"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="whatsapp-button"
+    aria-label="Contactar por WhatsApp"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+    </svg>
+  </a>
+
+  <footer class="w-full mt-16 border-t gradient-bg-accent">
+    <div class="container mx-auto px-8 py-16">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl ml-auto" style="margin-right: 0; padding-left: 4rem;">
+        <!-- About -->
+        <div>
+          <h3 class="brand-font text-sm text-white mb-4">Anita Integrales</h3>
+          <p class="text-white/90 text-sm mb-4">
+            Productos artesanales e integrales elaborados con amor y dedicación desde hace más de 15 años.
+          </p>
+          <p class="creative-font text-sm mb-6" style="color: var(--color-secondary)">
+            Alimentos ancestrales para tu bienestar
+          </p>
+          
+          <h4 class="text-sm text-white mb-4">Síguenos</h4>
+          <div class="mb-12">
+            <a
+              href="https://www.instagram.com/anita_integral?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+              target="_blank"
+              rel="noopener noreferrer"
+              class="social-icon-footer"
+              aria-label="Instagram"
+            >
+              <svg class="social-icon-svg" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Contact -->
+        <div>
+          <h4 class="text-sm text-white mb-4">Contacto</h4>
+          <div class="space-y-3 text-white/90 text-sm">
+            <div class="flex items-center gap-4">
+              <svg class="h-5 w-5 text-white flex-shrink-0" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92V21a2 2 0 0 1-2.18 2A19.8 19.8 0 0 1 3 5.18 2 2 0 0 1 5 3h4.09a2 2 0 0 1 2 1.72c.12.9.3 1.77.57 2.61a2 2 0 0 1-.45 2.11L10.91 11a16 16 0 0 0 6.09 6.09l1.56-1.3a2 2 0 0 1 2.11-.45c.84.27 1.71.45 2.61.57A2 2 0 0 1 22 16.92z"/>
+              </svg>
+              <a href="tel:+573222225271" class="text-white/90 hover:text-white transition-colors">
+                322 222 5271
+              </a>
+            </div>
+            <div class="flex items-center gap-4">
+              <svg class="h-5 w-5 text-white flex-shrink-0" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16v16H4z" fill="none"/>
+                <path d="M22 6l-10 7L2 6"/>
+              </svg>
+              <span>sdht91memories@gmail.com</span>
+            </div>
+            <div class="flex items-center gap-4">
+              <svg class="h-5 w-5 text-white flex-shrink-0" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 12-9 12S3 17 3 10a9 9 0 1 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+              <span>Calle 5 # 5 - 22, Cogua, Cundinamarca</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sales Points -->
+        <div>
+          <h4 class="text-sm text-white mb-4">Puntos de Venta</h4>
+          <div class="text-white/90 text-sm">
+            <p class="mb-2">Sábados cada 15 días:</p>
+            <p class="text-sm mb-4">• Floraria</p>
+            <p class="text-sm mb-4">• Kennedy La Macarena</p>
+            <p class="mb-2">Sábados cada 8 días:</p>
+            <p class="text-sm">• Parque Principal Fontibón</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-24 pt-20 border-t border-white/20 text-center pb-4">
+        <p class="text-white/70 text-sm mt-12">
+          © <span id="footer-year"></span> Anita Integrales. Todos los derechos reservados.
+        </p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
+
