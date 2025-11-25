@@ -13,19 +13,22 @@ if (strpos($path, '/api') === 0) {
     $apiPath = str_replace('/api', '', $path);
     $apiPath = ltrim($apiPath, '/');
     
-    // Construir la ruta completa al archivo
-    $filePath = __DIR__ . '/api/' . $apiPath;
-    
-    // Si no tiene extensión, agregar .php
-    if (!pathinfo($filePath, PATHINFO_EXTENSION)) {
-        $filePath .= '.php';
+    // Si está vacío o es solo index.php, usar index.php de api
+    if (empty($apiPath) || $apiPath === 'index.php') {
+        $filePath = __DIR__ . '/api/index.php';
+    } else {
+        // Construir la ruta completa al archivo
+        $filePath = __DIR__ . '/api/' . $apiPath;
+        
+        // Si no tiene extensión, agregar .php
+        if (!pathinfo($filePath, PATHINFO_EXTENSION)) {
+            $filePath .= '.php';
+        }
     }
     
     // Si el archivo existe, servirlo
     if (file_exists($filePath) && is_file($filePath)) {
-        $_SERVER['SCRIPT_NAME'] = '/api/' . $apiPath;
-        $_SERVER['PHP_SELF'] = '/api/' . $apiPath;
-        chdir(__DIR__ . '/api');
+        // NO cambiar el directorio de trabajo, solo incluir el archivo
         require $filePath;
         return true;
     }
