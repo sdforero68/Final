@@ -1,0 +1,36 @@
+# Configuración de Netlify para el frontend
+# Este archivo configura Netlify para desplegar solo el frontend
+
+[build]
+  # Directorio base donde están los archivos del frontend
+  base = "frontend"
+  
+  # Comando de build (vacío porque no necesitamos compilar nada)
+  command = ""
+  
+  # Directorio que Netlify debe publicar (el frontend mismo)
+  publish = "frontend"
+
+# Redirecciones para SPA (Single Page Application)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Headers de seguridad
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Headers CORS para las peticiones API al backend
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type, Authorization"
+
