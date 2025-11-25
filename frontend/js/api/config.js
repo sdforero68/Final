@@ -48,7 +48,19 @@ async function apiRequest(endpoint, options = {}) {
     
     try {
         const response = await fetch(url, config);
-        const data = await response.json();
+        
+        // Si no hay contenido, el backend no está respondiendo
+        if (!response.ok && response.status === 0) {
+            throw new Error('No se pudo conectar con el servidor. Por favor intenta más tarde.');
+        }
+        
+        let data;
+        try {
+            data = await response.json();
+        } catch (e) {
+            // Si no se puede parsear JSON, el backend no está respondiendo correctamente
+            throw new Error('El servidor no está respondiendo correctamente. Por favor intenta más tarde.');
+        }
         
         if (!response.ok) {
             throw new Error(data.error || `Error ${response.status}: ${response.statusText}`);
@@ -57,6 +69,10 @@ async function apiRequest(endpoint, options = {}) {
         return data;
     } catch (error) {
         console.error('API Error:', error);
+        // Si es un error de red, dar mensaje más claro
+        if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
+            throw new Error('No se pudo conectar con el servidor. Verifica tu conexión o intenta más tarde.');
+        }
         throw error;
     }
 }
