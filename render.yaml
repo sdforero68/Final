@@ -1,11 +1,10 @@
 services:
   - type: web
     name: anita-integrales-backend
-    runtime: php
+    runtime: docker
     plan: free
-    rootDir: backend
-    buildCommand: composer install --no-dev --optimize-autoloader || echo "Build complete"
-    startCommand: php -S 0.0.0.0:$PORT -t api
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
     envVars:
       - key: DB_HOST
         sync: false
@@ -17,4 +16,3 @@ services:
         sync: false
       - key: DB_PORT
         value: 3306
-
