@@ -31,9 +31,15 @@ class Database {
             PDO::ATTR_EMULATE_PREPARES => false
         ];
         
+        // SSL opcional para servicios como PlanetScale
+        // Si DB_SSL está configurado como 'true' en database.env, activa SSL
+        if (isset($env['DB_SSL']) && $env['DB_SSL'] === 'true') {
+            $options[PDO::MYSQL_ATTR_SSL_CA] = true;
+            $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = false; // Para desarrollo
+        }
+        
         // Configurar charset directamente en DSN para evitar deprecación
         // Ya está en el DSN: charset=utf8mb4
-        // Solo agregamos el comando INIT si es necesario
         
         try {
             $this->connection = new PDO($dsn, $username, $password, $options);

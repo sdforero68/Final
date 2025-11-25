@@ -100,41 +100,18 @@ Integrales/
 
 ## 🌐 Publicar en Internet
 
-### Opción Recomendada: GitHub Pages + Render
+**📖 GUÍA COMPLETA PASO A PASO:**
+👉 **Lee [PASOS_FINALES.md](./PASOS_FINALES.md)** - Instrucciones detalladas de todo lo que debes hacer
 
-#### 1. Frontend en GitHub Pages
+### Resumen Rápido
 
-1. Ve a: https://github.com/sdforero68/Final/settings/pages
-2. Configura:
-   - **Branch:** `main`
-   - **Folder:** `/frontend` ⚠️
-3. Guarda y espera 2-3 minutos
-4. Tu sitio: `https://sdforero68.github.io/Final/`
+1. ✅ **Frontend:** GitHub Pages (ya configurado con GitHub Actions)
+2. ⏳ **Base de datos:** Crear en remotemysql.com o PlanetScale
+3. ⏳ **Backend:** Desplegar en Render.com
+4. ⏳ **URLs:** Actualizar solo 2 archivos (cambiar URLs, no código)
+5. ⏳ **Dominio:** Opcional - Registrar en Freenom.com
 
-**⚠️ Si ves el README en lugar de tu sitio, lee [CONFIGURAR_GITHUB_PAGES.md](./CONFIGURAR_GITHUB_PAGES.md)**
-
-#### 2. Backend en Render
-
-1. Ve a: https://render.com
-2. Crea cuenta con GitHub
-3. Click "New +" → "Web Service"
-4. Configuración:
-   - **Root Directory:** `backend`
-   - **Start Command:** `php -S 0.0.0.0:$PORT -t .`
-   - **Environment Variables:** (credenciales de MySQL)
-5. Tu API: `https://anita-integrales-api.onrender.com`
-
-#### 3. Actualizar URLs
-
-**En `frontend/js/api/config.js`:**
-```javascript
-const PRODUCTION_API_URL = 'https://tu-backend.onrender.com/api';
-```
-
-**En `backend/api/config.php`:**
-```php
-'https://sdforero68.github.io', // Agregar en $allowedOrigins
-```
+**Ver [PASOS_FINALES.md](./PASOS_FINALES.md) para instrucciones detalladas de cada paso.**
 
 ## 🔧 Configuración
 
