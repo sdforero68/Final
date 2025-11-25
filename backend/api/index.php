@@ -3,24 +3,28 @@
  * Página principal de la API
  */
 
-header('Content-Type: application/json; charset=utf-8');
-header('Access-Control-Allow-Origin: *');
+require_once __DIR__ . '/config.php';
 
-echo json_encode([
-    'success' => true,
-    'message' => 'Anita Integrales API',
-    'version' => '1.0',
-    'status' => 'online',
+sendResponse([
+    'name' => 'Anita Integrales API',
+    'version' => '1.0.0',
+    'status' => 'active',
     'endpoints' => [
-        'test' => 'GET /test.php - Endpoint de diagnóstico',
-        'products' => [
-            'GET /products/list.php' => 'Listar productos',
-            'GET /products/categories.php' => 'Listar categorías',
-            'GET /products/get.php?id=xxx' => 'Obtener producto'
-        ],
-        'auth' => [
-            'POST /auth/register.php' => 'Registrar usuario',
-            'POST /auth/login.php' => 'Iniciar sesión'
-        ]
-    ]
-], JSON_PRETTY_PRINT);
+        'POST /auth/register.php' => 'Registrar nuevo usuario',
+        'POST /auth/login.php' => 'Iniciar sesión',
+        'POST /auth/logout.php' => 'Cerrar sesión',
+        'GET /auth/verify.php' => 'Verificar token',
+        'GET /orders.php?userId=X' => 'Obtener pedidos del usuario',
+        'POST /orders.php' => 'Crear nuevo pedido',
+        'GET /orders/list.php' => 'Listar pedidos (requiere autenticación)',
+        'GET /orders/create.php' => 'Crear pedido (requiere autenticación)',
+        'GET /products/list.php' => 'Listar productos',
+        'GET /products/categories.php' => 'Listar categorías',
+        'GET /products/get.php?id=xxx' => 'Obtener producto',
+        'GET /cart/get.php' => 'Obtener carrito',
+        'POST /cart/add.php' => 'Agregar al carrito',
+        'GET /health.php' => 'Health check',
+        'GET /test.php' => 'Endpoint de prueba'
+    ],
+    'documentation' => 'Consulta la documentación para más detalles'
+]);
