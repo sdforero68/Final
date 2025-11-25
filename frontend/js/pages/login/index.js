@@ -219,11 +219,8 @@ async function handleLogin(e) {
   
   try {
     // Intentar login con API
-    // Construir ruta absoluta: /Final/js/api/auth.js
-    const pathParts = window.location.pathname.split('/').filter(p => p);
-    const repoName = pathParts[0] || 'Final';
-    const authModulePath = `/${repoName}/js/api/auth.js`;
-    const { login: apiLogin } = await import(authModulePath);
+    // Importar auth.js - ruta relativa simple desde pages/login/index.js
+    const { login: apiLogin } = await import('../../api/auth.js');
     const result = await apiLogin(email, password);
     
     // Login exitoso - la API ya guarda el token y usuario en localStorage
@@ -280,11 +277,8 @@ async function handleSignup(e) {
   
   try {
     // Intentar registro con API
-    // Construir ruta absoluta: /Final/js/api/auth.js
-    const pathParts = window.location.pathname.split('/').filter(p => p);
-    const repoName = pathParts[0] || 'Final';
-    const authModulePath = `/${repoName}/js/api/auth.js`;
-    const { register: apiRegister } = await import(authModulePath);
+    // Importar auth.js - ruta relativa simple desde pages/login/index.js
+    const { register: apiRegister } = await import('../../api/auth.js');
     const result = await apiRegister({ name, email, phone, password });
     
     // Registro exitoso - la API ya guarda el token y usuario en localStorage
