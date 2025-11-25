@@ -280,14 +280,11 @@ async function handleSignup(e) {
   
   try {
     // Intentar registro con API
-    // Construir ruta absoluta desde la raíz del sitio
+    // Construir ruta absoluta: /Final/js/api/auth.js
     const pathParts = window.location.pathname.split('/').filter(p => p);
-    // Encontrar la base del repositorio (antes de 'pages' o 'js')
-    const repoBaseIndex = pathParts.findIndex(p => p === 'Final' || p === 'pages' || p === 'js');
-    const basePath = repoBaseIndex >= 0 
-      ? '/' + pathParts.slice(0, repoBaseIndex + (pathParts[repoBaseIndex] === 'Final' ? 1 : 0)).join('/')
-      : '';
-    const { register: apiRegister } = await import(`${basePath}/js/api/auth.js`);
+    const repoName = pathParts[0] || 'Final';
+    const authModulePath = `/${repoName}/js/api/auth.js`;
+    const { register: apiRegister } = await import(authModulePath);
     const result = await apiRegister({ name, email, phone, password });
     
     // Registro exitoso - la API ya guarda el token y usuario en localStorage
