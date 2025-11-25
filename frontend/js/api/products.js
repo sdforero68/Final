@@ -1,39 +1,35 @@
 /**
  * Servicio de productos
+ * NOTA: El backend no tiene endpoints de productos, se usan datos estáticos
  */
 
-import { apiGet } from './config.js';
+import { products, categories } from '../products.js';
 
 /**
- * Obtener todos los productos
+ * Obtener todos los productos (desde datos estáticos)
  */
 export async function getProducts() {
-    const response = await apiGet('products/list.php');
-    if (response.success) {
-        return response.data;
-    }
-    throw new Error(response.error || 'Error al obtener productos');
+    // Usar productos estáticos ya que el backend no tiene este endpoint
+    return products;
 }
 
 /**
- * Obtener un producto por ID
+ * Obtener un producto por ID (desde datos estáticos)
  */
 export async function getProduct(id) {
-    const response = await apiGet(`products/get.php?id=${encodeURIComponent(id)}`);
-    if (response.success) {
-        return response.data;
+    // Usar productos estáticos ya que el backend no tiene este endpoint
+    const product = products.find(p => p.id === id || p.code === id);
+    if (!product) {
+        throw new Error('Producto no encontrado');
     }
-    throw new Error(response.error || 'Error al obtener producto');
+    return product;
 }
 
 /**
- * Obtener todas las categorías
+ * Obtener todas las categorías (desde datos estáticos)
  */
 export async function getCategories() {
-    const response = await apiGet('products/categories.php');
-    if (response.success) {
-        return response.data;
-    }
-    throw new Error(response.error || 'Error al obtener categorías');
+    // Usar categorías estáticas ya que el backend no tiene este endpoint
+    return categories;
 }
 
