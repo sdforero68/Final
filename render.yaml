@@ -3,6 +3,7 @@ services:
     name: anita-integrales-backend
     runtime: php
     plan: free
+    rootDir: backend
     buildCommand: composer install --no-dev --optimize-autoloader || echo "Build complete"
     startCommand: php -S 0.0.0.0:$PORT -t api
     envVars:
@@ -16,3 +17,4 @@ services:
         sync: false
       - key: DB_PORT
         value: 3306
+
