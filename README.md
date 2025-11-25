@@ -14,6 +14,55 @@ Sitio web e-commerce para productos artesanales e integrales, desarrollado con *
 - ✅ Diseño responsive (móvil, tablet, desktop)
 - ✅ Backend API RESTful completo
 
+## 🚀 Inicio Rápido
+
+### Desarrollo Local
+
+```bash
+# 1. Crear base de datos
+mysql -u root -p < backend/sql/init.sql
+# Contraseña: Naniela2928**
+
+# 2. Poblar productos
+php backend/sql/populate_products.php
+
+# 3. Iniciar servidores
+# Terminal 1 - Frontend:
+cd frontend && php -S localhost:8000
+
+# Terminal 2 - Backend:
+cd .. && sudo php -S localhost:80 -t .
+```
+
+**URLs:**
+- Frontend: http://localhost:8000
+- API: http://localhost/backend/api/products/list.php
+
+### Publicar en Internet (GitHub Pages)
+
+**⚠️ IMPORTANTE: GitHub Pages no permite seleccionar subcarpetas directamente. Usa GitHub Actions:**
+
+1. **Haz commit y push del workflow:**
+   ```bash
+   git add .github/ frontend/.nojekyll
+   git commit -m "Configurar GitHub Actions para Pages"
+   git push origin main
+   ```
+
+2. **En GitHub, ve a Settings → Pages:**
+   - En **"Source"**, selecciona: **"GitHub Actions"** ⚠️ (NO "Deploy from a branch")
+
+3. **Activa GitHub Actions:**
+   - Settings → Actions → General
+   - **Workflow permissions:** "Read and write permissions"
+   - Guarda
+
+4. **Espera 2-3 minutos** (el workflow se ejecutará automáticamente)
+
+5. Tu sitio estará en: `https://sdforero68.github.io/Final/`
+
+**📖 Guía detallada:** Lee [CONFIGURAR_GITHUB_PAGES_SOLUCION.md](./CONFIGURAR_GITHUB_PAGES_SOLUCION.md)
+
 ## 🏗️ Arquitectura
 
 ### Frontend
@@ -33,231 +82,84 @@ Sitio web e-commerce para productos artesanales e integrales, desarrollado con *
 
 ```
 Integrales/
-├── frontend/              # Frontend (HTML, CSS, JS)
+├── frontend/              # Frontend (HTML, CSS, JS) - Se sirve en GitHub Pages
+│   ├── .nojekyll         # Archivo necesario para GitHub Pages
+│   ├── index.html        # Página principal
 │   ├── js/
-│   │   ├── api/          # Servicios de API (auth, products, cart, orders)
-│   │   ├── pages/        # Lógica por página
+│   │   ├── api/          # Servicios de API
 │   │   └── ...
 │   ├── css/              # Estilos
 │   ├── assets/           # Imágenes y recursos
 │   └── pages/            # Páginas HTML
 ├── backend/              # Backend (PHP + MySQL)
 │   ├── api/              # Endpoints de la API
-│   │   ├── auth/        # Autenticación (login, registro, logout)
-│   │   ├── products/    # Productos (listar, obtener, categorías)
-│   │   ├── cart/        # Carrito (agregar, actualizar, eliminar)
-│   │   └── orders/      # Pedidos (crear, listar, obtener)
-│   ├── config/          # Configuración (database.php, config.php)
-│   └── sql/             # Scripts SQL (init.sql, populate_products.php)
-└── README.md            # Este archivo
+│   ├── config/          # Configuración
+│   └── sql/             # Scripts SQL
+└── README.md            # Este archivo (solo documentación)
 ```
 
-## 🚀 Configuración Local (Desarrollo)
-
-### Requisitos
-
-- PHP 7.4 o superior
-- MySQL 5.7 o superior
-- Servidor web (Apache/Nginx) o PHP Built-in Server
-
-### Paso 1: Configurar Base de Datos
-
-```bash
-# Conectarse a MySQL
-mysql -u root -p
-# Contraseña: Naniela2928**
-
-# Crear base de datos y tablas
-mysql -u root -p < backend/sql/init.sql
-
-# Poblar productos en la base de datos
-php backend/sql/populate_products.php
-```
-
-### Paso 2: Configurar Credenciales
-
-Edita `backend/config/database.env` si necesitas cambiar las credenciales:
-
-```env
-DB_HOST=localhost
-DB_PORT=3306
-DB_NAME=anita_integrales
-DB_USER=root
-DB_PASSWORD=Naniela2928**
-```
-
-### Paso 3: Iniciar Servidores
-
-**Terminal 1 - Frontend:**
-```bash
-cd frontend
-php -S localhost:8000
-```
-
-**Terminal 2 - Backend:**
-```bash
-cd /Users/sdforero/Desktop/web4/Integrales
-sudo php -S localhost:80 -t .
-```
-
-### Paso 4: Acceder a la Aplicación
-
-- **Frontend:** http://localhost:8000
-- **API:** http://localhost/backend/api/products/list.php
-
-## 🌐 Publicar en Internet (GitHub Pages)
+## 🌐 Publicar en Internet
 
 ### Opción Recomendada: GitHub Pages + Render
 
-**Ventajas:**
-- ✅ Completamente gratis
-- ✅ HTTPS automático
-- ✅ Deploy automático desde GitHub
-- ✅ Subdominio incluido
+#### 1. Frontend en GitHub Pages
 
-### Pasos Rápidos
-
-#### 1. Activar GitHub Pages (5 minutos)
-
-1. Ve a tu repositorio en GitHub: https://github.com/sdforero68/Final
-2. Click en **"Settings"** → **"Pages"**
-3. En **"Source"**, selecciona:
+1. Ve a: https://github.com/sdforero68/Final/settings/pages
+2. Configura:
    - **Branch:** `main`
-   - **Folder:** `/frontend` ⚠️ IMPORTANTE
-4. Click **"Save"**
-5. Espera 2-3 minutos
-6. Tu sitio estará en: `https://sdforero68.github.io/Final/`
+   - **Folder:** `/frontend` ⚠️
+3. Guarda y espera 2-3 minutos
+4. Tu sitio: `https://sdforero68.github.io/Final/`
 
-#### 2. Desplegar Backend en Render (10 minutos)
+**⚠️ Si ves el README en lugar de tu sitio, lee [CONFIGURAR_GITHUB_PAGES.md](./CONFIGURAR_GITHUB_PAGES.md)**
+
+#### 2. Backend en Render
 
 1. Ve a: https://render.com
 2. Crea cuenta con GitHub
-3. Click **"New +"** → **"Web Service"**
-4. Conecta tu repositorio `Final`
-5. Configuración:
-   - **Name:** `anita-integrales-api`
-   - **Environment:** `PHP`
-   - **Root Directory:** `backend` ⚠️ IMPORTANTE
-   - **Build Command:** (dejar vacío)
+3. Click "New +" → "Web Service"
+4. Configuración:
+   - **Root Directory:** `backend`
    - **Start Command:** `php -S 0.0.0.0:$PORT -t .`
-6. En **"Environment Variables"**, agrega:
-   ```
-   DB_HOST = [tu-host-mysql]
-   DB_PORT = 3306
-   DB_NAME = anita_integrales
-   DB_USER = [tu-usuario]
-   DB_PASSWORD = [tu-contraseña]
-   ```
-7. Click **"Create Web Service"**
-8. Espera 5-10 minutos
-9. Tu API estará en: `https://anita-integrales-api.onrender.com`
+   - **Environment Variables:** (credenciales de MySQL)
+5. Tu API: `https://anita-integrales-api.onrender.com`
 
-#### 3. Base de Datos MySQL en la Nube
+#### 3. Actualizar URLs
 
-**Opción A: Remotemysql.com (Fácil y gratis)**
-1. Ve a: https://remotemysql.com
-2. Crea cuenta
-3. Crea una base de datos
-4. Ejecuta los scripts SQL (`init.sql` y `populate_products.php`)
-
-**Opción B: PlanetScale (Profesional y gratis)**
-1. Ve a: https://planetscale.com
-2. Crea cuenta
-3. Crea una base de datos
-4. Ejecuta los scripts SQL
-
-#### 4. Actualizar URLs (5 minutos)
-
-**Actualizar API en Frontend:**
-
-Edita `frontend/js/api/config.js`:
-
+**En `frontend/js/api/config.js`:**
 ```javascript
-// Cambia esta línea (línea ~18):
-const PRODUCTION_API_URL = 'https://anita-integrales-api.onrender.com/api';
-// Reemplaza 'anita-integrales-api.onrender.com' con tu URL de Render
+const PRODUCTION_API_URL = 'https://tu-backend.onrender.com/api';
 ```
 
-**Actualizar CORS en Backend:**
-
-Edita `backend/api/config.php`:
-
+**En `backend/api/config.php`:**
 ```php
-$allowedOrigins = [
-    'http://localhost:8000',
-    'http://localhost',
-    'https://sdforero68.github.io', // ← Agrega esta línea
-];
+'https://sdforero68.github.io', // Agregar en $allowedOrigins
 ```
 
-#### 5. Hacer Commit y Push
+## 🔧 Configuración
 
-```bash
-git add .
-git commit -m "Configurar para producción"
-git push origin main
-```
 
-GitHub Pages se actualizará automáticamente en 1-2 minutos.
 
-### ✅ Resultado
+### API
 
-- **Frontend:** `https://sdforero68.github.io/Final/`
-- **Backend API:** `https://anita-integrales-api.onrender.com/api`
-- **Base de datos:** MySQL en la nube
-
-**Cualquier persona puede acceder desde cualquier dispositivo:** 📱💻📟
-
-## 🌍 Dominio Personalizado (Opcional)
-
-### Opción 1: Dominio Gratis con Freenom
-
-1. Ve a: https://www.freenom.com
-2. Busca un dominio disponible (ej: `anita-integrales`)
-3. Selecciona extensión `.tk`, `.ml`, `.ga` o `.cf` (gratis por 1 año)
-4. Completa el registro
-5. En GitHub → Settings → Pages → Custom domain
-6. Agrega tu dominio y configura los DNS según las instrucciones
-
-### Opción 2: Usar el Subdominio de GitHub Pages
-
-Directamente puedes compartir: `https://sdforero68.github.io/Final/`
-
-## 🔧 Configuración de la API
-
-La URL de la API se detecta automáticamente según el entorno:
-
-- **Desarrollo (localhost):** `http://localhost/backend/api`
-- **Producción:** Configura la URL en `frontend/js/api/config.js`
-
-El archivo `frontend/js/api/config.js` detecta automáticamente si estás en desarrollo o producción.
+La URL se detecta automáticamente:
+- **Desarrollo:** `http://localhost/backend/api`
+- **Producción:** Configurar en `frontend/js/api/config.js`
 
 ## 📊 Base de Datos
 
 ### Tablas
 
 - **users** - Usuarios registrados
-- **sessions** - Sesiones de usuario (tokens)
+- **sessions** - Sesiones (tokens)
 - **categories** - Categorías de productos
-- **products** - Productos (59 productos incluidos)
-- **cart_items** - Items en el carrito
-- **orders** - Pedidos realizados
-- **order_items** - Items de cada pedido
-- **favorites** - Productos favoritos
+- **products** - 59 productos
+- **cart_items** - Carrito de compras
+- **orders** - Pedidos
+- **order_items** - Items de pedidos
+- **favorites** - Favoritos
 
-### Verificar en TablePlus
-
-1. Abre TablePlus
-2. Crea nueva conexión MySQL:
-   - **Host:** `localhost`
-   - **Port:** `3306`
-   - **User:** `root`
-   - **Password:** `Naniela2928**`
-   - **Database:** `anita_integrales`
-
-## 🔍 Verificar que Todo Funciona
-
-### Local
+## 🔍 Verificar Instalación
 
 ```bash
 # Verificar base de datos
@@ -267,13 +169,14 @@ mysql -u root -p -e "USE anita_integrales; SELECT COUNT(*) FROM products;"
 curl http://localhost/backend/api/products/list.php
 ```
 
-### Producción
-
-1. **Frontend:** Abre `https://sdforero68.github.io/Final/`
-2. **API:** Abre `https://tu-api.onrender.com/api/products/list.php`
-3. **Consola del navegador (F12):** Verifica que no haya errores
-
 ## 🐛 Solución de Problemas
+
+### GitHub Pages muestra el README
+
+**Solución:**
+1. Ve a GitHub → Settings → Pages
+2. Verifica que **Folder** sea `/frontend` (NO `/root`)
+3. Lee: [CONFIGURAR_GITHUB_PAGES.md](./CONFIGURAR_GITHUB_PAGES.md)
 
 ### Error de CORS
 
@@ -284,26 +187,6 @@ curl http://localhost/backend/api/products/list.php
 
 - Verifica que el backend en Render esté corriendo
 - Revisa los logs en Render
-- Verifica las variables de entorno
-
-### Error 404 en GitHub Pages
-
-- Verifica que configuraste la carpeta `/frontend` en GitHub Pages
-- Asegúrate de que los archivos estén en la rama `main`
-
-## 🛠️ Tecnologías Utilizadas
-
-### Frontend
-- HTML5 semántico
-- CSS3 (Variables, Flexbox, Grid, Animaciones)
-- JavaScript ES6+ (Módulos, async/await, fetch API)
-- LocalStorage API
-
-### Backend
-- PHP 7.4+ con PDO
-- MySQL 5.7+
-- RESTful API
-- Autenticación por tokens
 
 ## 📝 Endpoints de la API
 
@@ -311,30 +194,23 @@ curl http://localhost/backend/api/products/list.php
 - `POST /api/auth/register.php` - Registrar usuario
 - `POST /api/auth/login.php` - Iniciar sesión
 - `POST /api/auth/logout.php` - Cerrar sesión
-- `GET /api/auth/verify.php` - Verificar token
 
 ### Productos
-- `GET /api/products/list.php` - Listar todos los productos
-- `GET /api/products/get.php?id=xxx` - Obtener un producto
-- `GET /api/products/categories.php` - Listar categorías
+- `GET /api/products/list.php` - Listar productos
+- `GET /api/products/get.php?id=xxx` - Obtener producto
+- `GET /api/products/categories.php` - Categorías
 
 ### Carrito (requiere autenticación)
 - `GET /api/cart/get.php` - Obtener carrito
 - `POST /api/cart/add.php` - Agregar producto
 - `PUT /api/cart/update.php` - Actualizar cantidad
 - `DELETE /api/cart/remove.php` - Eliminar producto
-- `POST /api/cart/clear.php` - Vaciar carrito
 
 ### Pedidos (requiere autenticación)
 - `POST /api/orders/create.php` - Crear pedido
-- `GET /api/orders/list.php` - Listar pedidos del usuario
-- `GET /api/orders/get.php?id=xxx` - Obtener pedido específico
+- `GET /api/orders/list.php` - Listar pedidos
+- `GET /api/orders/get.php?id=xxx` - Obtener pedido
 
 ## 👥 Créditos
 
-Desarrollado para **Anita Integrales** - Más de 15 años creando alimentos saludables con amor.
-
----
-
-**Versión**: 2.0.0  
-**Última actualización**: Diciembre 2024
+Desarrollado para **Anita Integrales** 
