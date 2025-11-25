@@ -219,7 +219,9 @@ async function handleLogin(e) {
   
   try {
     // Intentar login con API
-    const { login: apiLogin } = await import('../../api/auth.js');
+    // Usar ruta absoluta basada en la ubicación del sitio
+    const authPath = new URL('../../api/auth.js', import.meta.url).href;
+    const { login: apiLogin } = await import(authPath);
     const result = await apiLogin(email, password);
     
     // Login exitoso - la API ya guarda el token y usuario en localStorage
@@ -276,7 +278,9 @@ async function handleSignup(e) {
   
   try {
     // Intentar registro con API
-    const { register: apiRegister } = await import('../../api/auth.js');
+    // Usar ruta absoluta basada en la ubicación del sitio
+    const authPath = new URL('../../api/auth.js', import.meta.url).href;
+    const { register: apiRegister } = await import(authPath);
     const result = await apiRegister({ name, email, phone, password });
     
     // Registro exitoso - la API ya guarda el token y usuario en localStorage
