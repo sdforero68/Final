@@ -1,0 +1,11 @@
+# Configuración para Apache (si se usa Apache en lugar del servidor PHP built-in)
+RewriteEngine On
+RewriteBase /api/
+
+# Si el archivo o directorio existe, servirlo directamente
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Redirigir todo a index.php
+RewriteRule ^(.*)$ index.php [QSA,L]
+
