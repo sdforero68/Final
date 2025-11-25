@@ -12,8 +12,8 @@ const getApiBaseUrl = () => {
   }
   
   // Si estamos en producción (GitHub Pages, Vercel, etc.)
-  // URL del backend en Render
-  const PRODUCTION_API_URL = 'https://final-1-0wvc.onrender.com/api';
+  // URL del backend en Render - sin /api porque el servidor ya sirve desde api/
+  const PRODUCTION_API_URL = 'https://final-1-0wvc.onrender.com';
   
   return PRODUCTION_API_URL;
 };

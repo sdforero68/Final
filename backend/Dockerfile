@@ -12,5 +12,6 @@ COPY . .
 # Exponer puerto
 EXPOSE 10000
 
-# Comando de inicio - servir desde la raíz y usar api como punto de entrada
-CMD php -S 0.0.0.0:${PORT:-10000} -t . router.php
+# Comando de inicio - servir directamente desde api/
+# Las URLs serán: /products/list.php, /products/categories.php (sin /api)
+CMD php -S 0.0.0.0:${PORT:-10000} -t api
