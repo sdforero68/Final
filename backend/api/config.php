@@ -9,9 +9,8 @@ $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 $allowedOrigins = [
     'http://localhost:8000',  // Desarrollo local
     'http://localhost',       // Desarrollo local alternativo
-    // Agregar aquí tus dominios de producción
-    // 'https://tu-sitio.vercel.app',
-    // 'https://anita-integrales.tk',
+    'https://sdforero68.github.io',  // GitHub Pages
+    'https://sdforero68.github.io/Final',  // GitHub Pages con subdirectorio
 ];
 
 // Permitir el origen si está en la lista o si es desarrollo

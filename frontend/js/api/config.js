@@ -12,12 +12,8 @@ const getApiBaseUrl = () => {
   }
   
   // Si estamos en producción (GitHub Pages, Vercel, etc.)
-  // ⚠️ IMPORTANTE: Cambia esta URL por la de tu backend en Render/Railway/etc
-  // Ejemplo: 'https://anita-integrales-api.onrender.com/api'
-  // Ejemplo: 'https://tu-backend.railway.app/api'
-  
-  // URL de tu backend en producción (cambiar cuando despliegues)
-  const PRODUCTION_API_URL = 'https://sdforero68.github.io';
+  // URL del backend en Render
+  const PRODUCTION_API_URL = 'https://final-1-0wvc.onrender.com/api';
   
   return PRODUCTION_API_URL;
 };
