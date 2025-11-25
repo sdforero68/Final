@@ -6,12 +6,19 @@ RUN docker-php-ext-install pdo pdo_mysql
 # Crear directorio de trabajo
 WORKDIR /var/www/html
 
-# Copiar TODOS los archivos manteniendo estructura
-COPY api/ /var/www/html/api/
-COPY config/ /var/www/html/config/
+# Copiar TODA la estructura del backend
+COPY . /var/www/html/
 
-# FORZAR copia de database.php a api/ para que esté ahí seguro
-COPY config/database.php /var/www/html/api/database.php
+# Asegurar que database.php esté en api/ (copiar desde config/)
+RUN cp /var/www/html/config/database.php /var/www/html/api/database.php 2>/dev/null || true
+
+# Verificar que los archivos estén presentes
+RUN echo "=== Verificando estructura ===" && \
+    ls -la /var/www/html/ && \
+    echo "=== Verificando api/ ===" && \
+    ls -la /var/www/html/api/ | head -10 && \
+    echo "=== Verificando database.php ===" && \
+    ls -la /var/www/html/api/database.php || echo "ERROR: database.php no encontrado"
 
 # Exponer puerto
 EXPOSE 10000
