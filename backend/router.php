@@ -1,46 +1,42 @@
 <?php
 /**
  * Router para el servidor PHP built-in
- * Maneja las rutas /api/* y las redirige a la carpeta api/
+ * Maneja todas las rutas y las redirige a api/
  */
 
-$requestUri = $_SERVER['REQUEST_URI'] ?? '/';
+$requestUri = $_SERVER['REQUEST_URI'];
 $path = parse_url($requestUri, PHP_URL_PATH);
 
-// Debug: Log de la ruta (solo en desarrollo)
-if (getenv('DEBUG') === 'true') {
-    error_log("Router: Request URI: $requestUri, Path: $path");
-}
-
-// Si la ruta empieza con /api, servir desde la carpeta api/
-if (strpos($path, '/api') === 0) {
-    // Remover /api del inicio
-    $apiPath = str_replace('/api', '', $path);
-    $apiPath = ltrim($apiPath, '/');
-    
-    // Si está vacío, usar index.php
-    if (empty($apiPath) || $apiPath === 'index.php') {
-        $filePath = __DIR__ . '/api/index.php';
-    } else {
-        // Construir la ruta completa al archivo
-        $filePath = __DIR__ . '/api/' . $apiPath;
-        
-        // Si no tiene extensión, agregar .php
-        if (!pathinfo($filePath, PATHINFO_EXTENSION)) {
-            $filePath .= '.php';
-        }
-    }
-    
-    // Debug
-    if (getenv('DEBUG') === 'true') {
-        error_log("Router: apiPath: $apiPath, filePath: $filePath, exists: " . (file_exists($filePath) ? 'yes' : 'no'));
-    }
-    
-    // Si el archivo existe, servirlo
-    if (file_exists($filePath) && is_file($filePath)) {
-        require $filePath;
+// Si la ruta es / o /index.php, mostrar información de la API
+if ($path === '/' || $path === '/index.php') {
+    $indexFile = __DIR__ . '/api/index.php';
+    if (file_exists($indexFile)) {
+        require $indexFile;
         return true;
     }
+}
+
+// Todas las demás rutas van a api/
+// Remover la barra inicial
+$apiPath = ltrim($path, '/');
+
+// Si está vacío, usar index.php
+if (empty($apiPath)) {
+    $filePath = __DIR__ . '/api/index.php';
+} else {
+    // Construir la ruta completa al archivo en api/
+    $filePath = __DIR__ . '/api/' . $apiPath;
+    
+    // Si no tiene extensión y no es un directorio, agregar .php
+    if (!pathinfo($filePath, PATHINFO_EXTENSION) && !is_dir($filePath)) {
+        $filePath .= '.php';
+    }
+}
+
+// Si el archivo existe, servirlo
+if (file_exists($filePath) && is_file($filePath)) {
+    require $filePath;
+    return true;
 }
 
 // Si no se encuentra, devolver 404
@@ -49,8 +45,6 @@ header('Content-Type: application/json');
 echo json_encode([
     'error' => 'Not Found',
     'path' => $path,
-    'apiPath' => $apiPath ?? '',
-    'filePath' => $filePath ?? '',
     'message' => 'El endpoint solicitado no existe'
 ]);
 return true;
