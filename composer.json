@@ -1,9 +1,0 @@
-{
-  "name": "anita-integrales/backend",
-  "description": "Backend API for Anita Integrales",
-  "type": "project",
-  "require": {
-    "php": ">=8.0"
-  }
-}
-
