@@ -16,9 +16,6 @@ $allowedOrigins = [
 // Permitir el origen si está en la lista o si es desarrollo
 $allowedOrigin = in_array($origin, $allowedOrigins) ? $origin : '*';
 
-// En producción, puedes ser más restrictivo:
-// $allowedOrigin = in_array($origin, $allowedOrigins) ? $origin : '';
-
 header("Access-Control-Allow-Origin: $allowedOrigin");
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
@@ -39,42 +36,13 @@ ini_set('log_errors', 1);
 // Zona horaria
 date_default_timezone_set('America/Bogota');
 
-// Incluir configuración de base de datos
-// SOLUCIÓN DEFINITIVA: Buscar database.php en múltiples ubicaciones posibles
-$dbPaths = [
-    __DIR__ . '/database.php',              // En api/ (preferido para Docker)
-    __DIR__ . '/../config/database.php',    // En config/ (desarrollo local)
-    dirname(__DIR__) . '/config/database.php' // Alternativa
-];
-
-$dbLoaded = false;
-foreach ($dbPaths as $dbPath) {
-    if (file_exists($dbPath)) {
-        require_once $dbPath;
-        $dbLoaded = true;
-        break;
-    }
+// Incluir configuración de base de datos - SOLUCIÓN SIMPLE
+$dbFile = __DIR__ . '/database.php';
+if (!file_exists($dbFile)) {
+    // Si no está en api/, buscar en config/
+    $dbFile = __DIR__ . '/../config/database.php';
 }
-
-if (!$dbLoaded) {
-    // Si no se encuentra, intentar error más descriptivo
-    $errorMsg = "ERROR CRITICO: database.php no encontrado. Buscado en:\n";
-    foreach ($dbPaths as $path) {
-        $errorMsg .= "  - " . $path . " (" . (file_exists($path) ? "EXISTE" : "NO EXISTE") . ")\n";
-    }
-    $errorMsg .= "\n__DIR__ = " . __DIR__ . "\n";
-    $errorMsg .= "Estructura actual:\n";
-    if (is_dir(__DIR__)) {
-        $errorMsg .= "  Directorios en " . __DIR__ . ":\n";
-        foreach (scandir(__DIR__) as $item) {
-            if (is_file(__DIR__ . '/' . $item)) {
-                $errorMsg .= "    - " . $item . "\n";
-            }
-        }
-    }
-    error_log($errorMsg);
-    throw new Exception("No se pudo encontrar database.php en ninguna ubicación. Ver logs para detalles.");
-}
+require_once $dbFile;
 
 // Función para enviar respuestas JSON
 function sendResponse($data, $statusCode = 200) {
