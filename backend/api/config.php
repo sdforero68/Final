@@ -11,6 +11,7 @@ $allowedOrigins = [
     'http://localhost',       // Desarrollo local alternativo
     'https://sdforero68.github.io',  // GitHub Pages
     'https://sdforero68.github.io/Final',  // GitHub Pages con subdirectorio
+    'https://final-1-0wvc.onrender.com',  // Backend en Render
 ];
 
 // Permitir el origen si está en la lista o si es desarrollo
