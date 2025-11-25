@@ -40,13 +40,41 @@ ini_set('log_errors', 1);
 date_default_timezone_set('America/Bogota');
 
 // Incluir configuración de base de datos
-// Buscar directamente en api/ primero (para Docker)
-$dbPath = __DIR__ . '/database.php';
-if (!file_exists($dbPath)) {
-    // Si no está en api/, buscar en config/
-    $dbPath = __DIR__ . '/../config/database.php';
+// SOLUCIÓN DEFINITIVA: Buscar database.php en múltiples ubicaciones posibles
+$dbPaths = [
+    __DIR__ . '/database.php',              // En api/ (preferido para Docker)
+    __DIR__ . '/../config/database.php',    // En config/ (desarrollo local)
+    dirname(__DIR__) . '/config/database.php' // Alternativa
+];
+
+$dbLoaded = false;
+foreach ($dbPaths as $dbPath) {
+    if (file_exists($dbPath)) {
+        require_once $dbPath;
+        $dbLoaded = true;
+        break;
+    }
 }
-require_once $dbPath;
+
+if (!$dbLoaded) {
+    // Si no se encuentra, intentar error más descriptivo
+    $errorMsg = "ERROR CRITICO: database.php no encontrado. Buscado en:\n";
+    foreach ($dbPaths as $path) {
+        $errorMsg .= "  - " . $path . " (" . (file_exists($path) ? "EXISTE" : "NO EXISTE") . ")\n";
+    }
+    $errorMsg .= "\n__DIR__ = " . __DIR__ . "\n";
+    $errorMsg .= "Estructura actual:\n";
+    if (is_dir(__DIR__)) {
+        $errorMsg .= "  Directorios en " . __DIR__ . ":\n";
+        foreach (scandir(__DIR__) as $item) {
+            if (is_file(__DIR__ . '/' . $item)) {
+                $errorMsg .= "    - " . $item . "\n";
+            }
+        }
+    }
+    error_log($errorMsg);
+    throw new Exception("No se pudo encontrar database.php en ninguna ubicación. Ver logs para detalles.");
+}
 
 // Función para enviar respuestas JSON
 function sendResponse($data, $statusCode = 200) {
@@ -107,4 +135,3 @@ function getAuthToken() {
     // También buscar en parámetros GET/POST por compatibilidad
     return $_GET['token'] ?? $_POST['token'] ?? null;
 }
-
