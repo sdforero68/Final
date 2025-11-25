@@ -219,9 +219,11 @@ async function handleLogin(e) {
   
   try {
     // Intentar login con API
-    // Resolver ruta absoluta desde la raíz del sitio (funciona en GitHub Pages)
-    const basePath = window.location.pathname.includes('/pages/') ? '../../' : '../';
-    const { login: apiLogin } = await import(`${basePath}js/api/auth.js`);
+    // Construir ruta absoluta: /Final/js/api/auth.js
+    const pathParts = window.location.pathname.split('/').filter(p => p);
+    const repoName = pathParts[0] || 'Final';
+    const authModulePath = `/${repoName}/js/api/auth.js`;
+    const { login: apiLogin } = await import(authModulePath);
     const result = await apiLogin(email, password);
     
     // Login exitoso - la API ya guarda el token y usuario en localStorage
