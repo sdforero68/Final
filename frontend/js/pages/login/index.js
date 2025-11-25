@@ -219,9 +219,9 @@ async function handleLogin(e) {
   
   try {
     // Intentar login con API
-    // Usar ruta absoluta basada en la ubicación del sitio
-    const authPath = new URL('../../api/auth.js', import.meta.url).href;
-    const { login: apiLogin } = await import(authPath);
+    // Resolver ruta absoluta desde la raíz del sitio (funciona en GitHub Pages)
+    const basePath = window.location.pathname.includes('/pages/') ? '../../' : '../';
+    const { login: apiLogin } = await import(`${basePath}js/api/auth.js`);
     const result = await apiLogin(email, password);
     
     // Login exitoso - la API ya guarda el token y usuario en localStorage
@@ -278,9 +278,9 @@ async function handleSignup(e) {
   
   try {
     // Intentar registro con API
-    // Usar ruta absoluta basada en la ubicación del sitio
-    const authPath = new URL('../../api/auth.js', import.meta.url).href;
-    const { register: apiRegister } = await import(authPath);
+    // Resolver ruta absoluta desde la raíz del sitio (funciona en GitHub Pages)
+    const basePath = window.location.pathname.includes('/pages/') ? '../../' : '../';
+    const { register: apiRegister } = await import(`${basePath}js/api/auth.js`);
     const result = await apiRegister({ name, email, phone, password });
     
     // Registro exitoso - la API ya guarda el token y usuario en localStorage
