@@ -17,7 +17,7 @@ const getApiBaseUrl = () => {
   // Ejemplo: 'https://tu-backend.railway.app/api'
   
   // URL de tu backend en producción (cambiar cuando despliegues)
-  const PRODUCTION_API_URL = 'https://anita-integrales-api.onrender.com/api';
+  const PRODUCTION_API_URL = 'https://sdforero68.github.io';
   
   return PRODUCTION_API_URL;
 };
