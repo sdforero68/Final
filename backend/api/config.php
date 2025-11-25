@@ -36,11 +36,17 @@ ini_set('log_errors', 1);
 // Zona horaria
 date_default_timezone_set('America/Bogota');
 
-// Incluir configuración de base de datos - SOLUCIÓN SIMPLE
+// Incluir configuración de base de datos - FORZAR desde api/
 $dbFile = __DIR__ . '/database.php';
 if (!file_exists($dbFile)) {
-    // Si no está en api/, buscar en config/
     $dbFile = __DIR__ . '/../config/database.php';
+}
+if (!file_exists($dbFile)) {
+    // Log del error para debug
+    error_log("ERROR: database.php no encontrado en " . __DIR__ . "/database.php ni en " . __DIR__ . "/../config/database.php");
+    http_response_code(500);
+    echo json_encode(['error' => 'Error de configuración del servidor']);
+    exit();
 }
 require_once $dbFile;
 
