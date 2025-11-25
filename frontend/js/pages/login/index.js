@@ -218,47 +218,15 @@ async function handleLogin(e) {
   const password = document.getElementById('login-password').value;
   
   try {
-    // Buscar usuario en localStorage
-    const users = getUsers();
-    const user = users.find(u => u.email === email);
+    // Intentar login con API
+    const { login: apiLogin } = await import('../../../api/auth.js');
+    const result = await apiLogin(email, password);
     
-    if (!user) {
-      showError('login', 'Correo o contraseña incorrectos');
-      setLoading('login', false);
-      return;
-    }
-    
-    // Verificar contraseña (en producción, usar hash)
-    if (user.password !== password) {
-      showError('login', 'Correo o contraseña incorrectos');
-      setLoading('login', false);
-      return;
-    }
-    
-    // Crear sesión
-    const sessionToken = generateSessionToken();
-    const userData = {
-      id: user.id,
-      email: user.email,
-      user_metadata: {
-        name: user.name,
-        phone: user.phone || null
-      }
-    };
-    
-    // Guardar sesión actual
-    localStorage.setItem(CURRENT_SESSION_KEY, sessionToken);
-    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(userData));
-    
-    // También guardar en formato compatible con código anterior
-    localStorage.setItem('accessToken', sessionToken);
-    localStorage.setItem('user', JSON.stringify(userData));
-    
-    // Login exitoso
-    onLoginSuccess(sessionToken, userData);
+    // Login exitoso - la API ya guarda el token y usuario en localStorage
+    onLoginSuccess(result.token, result.user);
   } catch (err) {
     console.error('Login error:', err);
-    showError('login', 'Error al iniciar sesión. Por favor intenta de nuevo.');
+    showError('login', err.message || 'Error al iniciar sesión. Por favor intenta de nuevo.');
     setLoading('login', false);
   }
 }
@@ -307,54 +275,15 @@ async function handleSignup(e) {
   }
   
   try {
-    // Verificar si el usuario ya existe
-    const users = getUsers();
-    const existingUser = users.find(u => u.email === email);
+    // Intentar registro con API
+    const { register: apiRegister } = await import('../../../api/auth.js');
+    const result = await apiRegister({ name, email, phone, password });
     
-    if (existingUser) {
-      showError('signup', 'Este correo electrónico ya está registrado');
-      setLoading('signup', false);
-      return;
-    }
-    
-    // Crear nuevo usuario
-    const newUser = {
-      id: generateId(),
-      email: email,
-      password: password, // En producción, usar hash
-      name: name,
-      phone: phone || null,
-      createdAt: new Date().toISOString()
-    };
-    
-    // Guardar usuario
-    users.push(newUser);
-    saveUsers(users);
-    
-    // Crear sesión automáticamente
-    const sessionToken = generateSessionToken();
-    const userData = {
-      id: newUser.id,
-      email: newUser.email,
-      user_metadata: {
-        name: newUser.name,
-        phone: newUser.phone || null
-      }
-    };
-    
-    // Guardar sesión actual
-    localStorage.setItem(CURRENT_SESSION_KEY, sessionToken);
-    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(userData));
-    
-    // También guardar en formato compatible
-    localStorage.setItem('accessToken', sessionToken);
-    localStorage.setItem('user', JSON.stringify(userData));
-    
-    // Login automático después del registro
-    onLoginSuccess(sessionToken, userData);
+    // Registro exitoso - la API ya guarda el token y usuario en localStorage
+    onLoginSuccess(result.token, result.user);
   } catch (err) {
     console.error('Signup error:', err);
-    showError('signup', 'Error al crear la cuenta. Por favor intenta de nuevo.');
+    showError('signup', err.message || 'Error al crear la cuenta. Por favor intenta de nuevo.');
     setLoading('signup', false);
   }
 }

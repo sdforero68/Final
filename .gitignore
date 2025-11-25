@@ -20,3 +20,6 @@ frontend/assets/images/.DS_Store
 frontend/assets/images/Catálogo/.DS_Store
 backend/.DS_Store
 
+# Configuración sensible
+backend/config/database.env
+
