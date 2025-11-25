@@ -278,9 +278,10 @@ async function handleSignup(e) {
   
   try {
     // Intentar registro con API
-    // Resolver ruta absoluta desde la raíz del sitio (funciona en GitHub Pages)
-    const basePath = window.location.pathname.includes('/pages/') ? '../../' : '../';
-    const { register: apiRegister } = await import(`${basePath}js/api/auth.js`);
+    // Usar ruta absoluta desde la raíz del sitio para GitHub Pages
+    const baseUrl = window.location.origin + window.location.pathname.split('/').slice(0, -3).join('/');
+    const authUrl = `${baseUrl}/js/api/auth.js`.replace('//js', '/js');
+    const { register: apiRegister } = await import(authUrl);
     const result = await apiRegister({ name, email, phone, password });
     
     // Registro exitoso - la API ya guarda el token y usuario en localStorage
