@@ -40,14 +40,13 @@ ini_set('log_errors', 1);
 date_default_timezone_set('America/Bogota');
 
 // Incluir configuración de base de datos
-// Intentar múltiples ubicaciones para compatibilidad
-if (file_exists(__DIR__ . '/database.php')) {
-    require_once __DIR__ . '/database.php';
-} elseif (file_exists(__DIR__ . '/../config/database.php')) {
-    require_once __DIR__ . '/../config/database.php';
-} else {
-    throw new Exception("No se pudo encontrar database.php en ninguna ubicación esperada");
+// Buscar directamente en api/ primero (para Docker)
+$dbPath = __DIR__ . '/database.php';
+if (!file_exists($dbPath)) {
+    // Si no está en api/, buscar en config/
+    $dbPath = __DIR__ . '/../config/database.php';
 }
+require_once $dbPath;
 
 // Función para enviar respuestas JSON
 function sendResponse($data, $statusCode = 200) {
