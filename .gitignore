@@ -22,4 +22,5 @@ backend/.DS_Store
 
 # Configuración sensible
 backend/config/database.env
+config/database.env
 
