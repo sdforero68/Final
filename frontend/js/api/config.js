@@ -13,7 +13,7 @@ const getApiBaseUrl = () => {
     
     // Si estamos en producción (GitHub Pages, Vercel, etc.)
     // URL del backend en Render
-    const PRODUCTION_API_URL = 'https://api-mhib.onrender.com/';
+    const PRODUCTION_API_URL = 'https://api-mhib.onrender.com';
     
     return PRODUCTION_API_URL;
   };
