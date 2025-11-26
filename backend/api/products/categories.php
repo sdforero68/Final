@@ -1,7 +1,29 @@
 <?php
 /**
- * Endpoint: GET /api/products/categories.php
- * Listar todas las categorías
+ * @OA\Get(
+ *     path="/products/categories",
+ *     tags={"Productos"},
+ *     summary="Listar todas las categorías",
+ *     description="Obtiene una lista de todas las categorías de productos disponibles",
+ *     @OA\Response(
+ *         response=200,
+ *         description="Lista de categorías obtenida exitosamente",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(
+ *                 property="data",
+ *                 type="array",
+ *                 @OA\Items(
+ *                     type="object",
+ *                     @OA\Property(property="id", type="string", example="all"),
+ *                     @OA\Property(property="name", type="string", example="Todos")
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(response=500, description="Error del servidor")
+ * )
  */
 
 require_once __DIR__ . '/../config.php';

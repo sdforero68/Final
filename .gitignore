@@ -24,3 +24,7 @@ backend/.DS_Store
 backend/config/database.env
 config/database.env
 
+# Composer
+backend/vendor/
+backend/composer.lock
+

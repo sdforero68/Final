@@ -1,7 +1,32 @@
 <?php
 /**
- * Endpoint: POST /api/cart/add.php
- * Agregar un producto al carrito
+ * @OA\Post(
+ *     path="/cart/add",
+ *     tags={"Carrito"},
+ *     summary="Agregar producto al carrito",
+ *     description="Agrega un producto al carrito de compras del usuario autenticado. Si el producto ya existe, incrementa la cantidad",
+ *     security={{"bearerAuth": {}}},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"product_id"},
+ *             @OA\Property(property="product_id", type="string", example="1", description="ID o código del producto"),
+ *             @OA\Property(property="quantity", type="integer", example=1, description="Cantidad a agregar (por defecto: 1)")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Producto agregado al carrito exitosamente",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Producto agregado al carrito")
+ *         )
+ *     ),
+ *     @OA\Response(response=401, description="No autenticado"),
+ *     @OA\Response(response=404, description="Producto no encontrado"),
+ *     @OA\Response(response=500, description="Error del servidor")
+ * )
  */
 
 require_once __DIR__ . '/../config.php';

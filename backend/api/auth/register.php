@@ -1,7 +1,50 @@
 <?php
 /**
- * Endpoint: POST /api/auth/register.php
- * Registro de nuevos usuarios
+ * @OA\Post(
+ *     path="/auth/register",
+ *     tags={"Autenticación"},
+ *     summary="Registrar nuevo usuario",
+ *     description="Crea una nueva cuenta de usuario y devuelve un token de sesión",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"name", "email", "password"},
+ *             @OA\Property(property="name", type="string", example="Juan Pérez"),
+ *             @OA\Property(property="email", type="string", format="email", example="usuario@example.com"),
+ *             @OA\Property(property="phone", type="string", example="+573001234567"),
+ *             @OA\Property(property="password", type="string", format="password", example="contraseña123", description="Mínimo 6 caracteres")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="Usuario registrado exitosamente",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Usuario registrado exitosamente"),
+ *             @OA\Property(
+ *                 property="data",
+ *                 type="object",
+ *                 @OA\Property(property="token", type="string", example="abc123def456..."),
+ *                 @OA\Property(
+ *                     property="user",
+ *                     type="object",
+ *                     @OA\Property(property="id", type="string", example="1"),
+ *                     @OA\Property(property="email", type="string", example="usuario@example.com"),
+ *                     @OA\Property(
+ *                         property="user_metadata",
+ *                         type="object",
+ *                         @OA\Property(property="name", type="string", example="Juan Pérez"),
+ *                         @OA\Property(property="phone", type="string", example="+573001234567")
+ *                     )
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(response=400, description="Datos inválidos o faltantes"),
+ *     @OA\Response(response=409, description="El correo electrónico ya está registrado"),
+ *     @OA\Response(response=500, description="Error del servidor")
+ * )
  */
 
 require_once __DIR__ . '/../config.php';

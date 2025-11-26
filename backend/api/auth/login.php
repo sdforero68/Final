@@ -1,7 +1,48 @@
 <?php
 /**
- * Endpoint: POST /api/auth/login.php
- * Inicio de sesión de usuarios
+ * @OA\Post(
+ *     path="/auth/login",
+ *     tags={"Autenticación"},
+ *     summary="Iniciar sesión",
+ *     description="Autentica un usuario y devuelve un token de sesión",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"email", "password"},
+ *             @OA\Property(property="email", type="string", format="email", example="usuario@example.com"),
+ *             @OA\Property(property="password", type="string", format="password", example="contraseña123")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Login exitoso",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Login exitoso"),
+ *             @OA\Property(
+ *                 property="data",
+ *                 type="object",
+ *                 @OA\Property(property="token", type="string", example="abc123def456..."),
+ *                 @OA\Property(
+ *                     property="user",
+ *                     type="object",
+ *                     @OA\Property(property="id", type="string", example="1"),
+ *                     @OA\Property(property="email", type="string", example="usuario@example.com"),
+ *                     @OA\Property(
+ *                         property="user_metadata",
+ *                         type="object",
+ *                         @OA\Property(property="name", type="string", example="Juan Pérez"),
+ *                         @OA\Property(property="phone", type="string", example="+573001234567")
+ *                     )
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(response=400, description="Email y contraseña son requeridos"),
+ *     @OA\Response(response=401, description="Correo o contraseña incorrectos"),
+ *     @OA\Response(response=500, description="Error del servidor")
+ * )
  */
 
 require_once __DIR__ . '/../config.php';

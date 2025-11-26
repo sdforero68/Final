@@ -1,7 +1,36 @@
 <?php
 /**
- * Endpoint: GET /api/cart/get.php
- * Obtener el carrito del usuario autenticado
+ * @OA\Get(
+ *     path="/cart/get",
+ *     tags={"Carrito"},
+ *     summary="Obtener carrito de compras",
+ *     description="Obtiene todos los productos en el carrito del usuario autenticado",
+ *     security={{"bearerAuth": {}}},
+ *     @OA\Response(
+ *         response=200,
+ *         description="Carrito obtenido exitosamente",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(
+ *                 property="data",
+ *                 type="array",
+ *                 @OA\Items(
+ *                     type="object",
+ *                     @OA\Property(property="id", type="string", example="ACH001"),
+ *                     @OA\Property(property="name", type="string", example="Achiras Grandes"),
+ *                     @OA\Property(property="price", type="number", format="float", example=15000.00),
+ *                     @OA\Property(property="quantity", type="integer", example=2),
+ *                     @OA\Property(property="image", type="string"),
+ *                     @OA\Property(property="category", type="string", example="panes"),
+ *                     @OA\Property(property="description", type="string")
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(response=401, description="No autenticado"),
+ *     @OA\Response(response=500, description="Error del servidor")
+ * )
  */
 
 require_once __DIR__ . '/../config.php';

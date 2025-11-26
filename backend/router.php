@@ -10,6 +10,11 @@ $path = parse_url($requestUri, PHP_URL_PATH);
 // Normalizar la ruta
 $path = trim($path, '/');
 
+// Remover 'api/' del inicio si está presente (para compatibilidad)
+if (strpos($path, 'api/') === 0) {
+    $path = substr($path, 4);
+}
+
 // Si la ruta es vacía, usar index.php
 if (empty($path)) {
     $path = 'index.php';

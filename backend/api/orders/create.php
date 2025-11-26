@@ -1,7 +1,70 @@
 <?php
 /**
- * Endpoint: POST /api/orders/create.php
- * Crear un nuevo pedido desde el carrito
+ * @OA\Post(
+ *     path="/orders/create",
+ *     tags={"Pedidos"},
+ *     summary="Crear nuevo pedido",
+ *     description="Crea un nuevo pedido desde los productos del carrito del usuario autenticado",
+ *     security={{"bearerAuth": {}}},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"delivery_method", "payment_method"},
+ *             @OA\Property(property="delivery_method", type="string", enum={"delivery", "pickup"}, example="delivery", description="Método de entrega"),
+ *             @OA\Property(property="payment_method", type="string", example="transferencia", description="Método de pago"),
+ *             @OA\Property(
+ *                 property="customer_info",
+ *                 type="object",
+ *                 description="Información del cliente (opcional si difiere del usuario)",
+ *                 @OA\Property(property="name", type="string", example="Juan Pérez"),
+ *                 @OA\Property(property="email", type="string", format="email", example="usuario@example.com"),
+ *                 @OA\Property(property="phone", type="string", example="+573001234567"),
+ *                 @OA\Property(property="address", type="string", example="Calle 123 #45-67", description="Requerido si delivery_method es 'delivery'"),
+ *                 @OA\Property(property="notes", type="string", example="Entregar en la mañana")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="Pedido creado exitosamente",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="Pedido creado exitosamente"),
+ *             @OA\Property(
+ *                 property="data",
+ *                 type="object",
+ *                 @OA\Property(
+ *                     property="order",
+ *                     type="object",
+ *                     @OA\Property(property="id", type="string", example="1"),
+ *                     @OA\Property(property="order_number", type="string", example="ORD-20251126-ABC12345"),
+ *                     @OA\Property(property="status", type="string", example="pendiente"),
+ *                     @OA\Property(property="subtotal", type="number", format="float", example=30000.00),
+ *                     @OA\Property(property="delivery_fee", type="number", format="float", example=5000.00),
+ *                     @OA\Property(property="total", type="number", format="float", example=35000.00),
+ *                     @OA\Property(property="delivery_method", type="string", example="delivery"),
+ *                     @OA\Property(property="payment_method", type="string", example="transferencia"),
+ *                     @OA\Property(property="created_at", type="string", format="date-time"),
+ *                     @OA\Property(
+ *                         property="items",
+ *                         type="array",
+ *                         @OA\Items(
+ *                             type="object",
+ *                             @OA\Property(property="name", type="string"),
+ *                             @OA\Property(property="price", type="number", format="float"),
+ *                             @OA\Property(property="quantity", type="integer"),
+ *                             @OA\Property(property="subtotal", type="number", format="float")
+ *                         )
+ *                     )
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(response=400, description="Datos inválidos o carrito vacío"),
+ *     @OA\Response(response=401, description="No autenticado"),
+ *     @OA\Response(response=500, description="Error del servidor")
+ * )
  */
 
 require_once __DIR__ . '/../config.php';

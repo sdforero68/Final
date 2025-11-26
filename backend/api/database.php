@@ -10,12 +10,25 @@ class Database {
     
     private function __construct() {
         // PRIORIDAD 1: Variables de entorno (para Render/nube)
-        $host = getenv('DB_HOST');
-        $port = getenv('DB_PORT');
-        $dbname = getenv('DB_NAME');
-        $username = getenv('DB_USER');
-        $password = getenv('DB_PASSWORD');
-        $dbSsl = getenv('DB_SSL');
+        $host = getenv('DB_HOST') ?: getenv('DATABASE_HOST');
+        $port = getenv('DB_PORT') ?: getenv('DATABASE_PORT');
+        $dbname = getenv('DB_NAME') ?: getenv('DATABASE_NAME');
+        $username = getenv('DB_USER') ?: getenv('DATABASE_USER');
+        $password = getenv('DB_PASSWORD') ?: getenv('DATABASE_PASSWORD');
+        $dbSsl = getenv('DB_SSL') ?: getenv('DATABASE_SSL');
+        
+        // Si hay DATABASE_URL (formato usado por algunos servicios), parsearlo
+        $databaseUrl = getenv('DATABASE_URL');
+        if ($databaseUrl && !$host) {
+            $urlParts = parse_url($databaseUrl);
+            if ($urlParts) {
+                $host = $urlParts['host'] ?? null;
+                $port = $urlParts['port'] ?? '3306';
+                $dbname = isset($urlParts['path']) ? ltrim($urlParts['path'], '/') : null;
+                $username = $urlParts['user'] ?? null;
+                $password = $urlParts['pass'] ?? null;
+            }
+        }
         
         // PRIORIDAD 2: Archivo .env (para desarrollo local)
         if (!$host) {
@@ -52,17 +65,23 @@ class Database {
         $username = $username ?: 'root';
         $password = $password ?: '';
         
+        // Validar que tenemos los datos mínimos necesarios
+        if (empty($host) || empty($dbname)) {
+            throw new Exception("Configuración de base de datos incompleta. Verifica las variables de entorno DB_HOST y DB_NAME.");
+        }
+        
         // Construir DSN
         $dsn = "mysql:host={$host};port={$port};dbname={$dbname};charset=utf8mb4";
         
         $options = [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES => false
+            PDO::ATTR_EMULATE_PREPARES => false,
+            PDO::ATTR_TIMEOUT => 5 // Timeout de 5 segundos
         ];
         
         // SSL opcional para servicios en la nube que lo requieren
-        if ($dbSsl === 'true' || $dbSsl === true) {
+        if ($dbSsl === 'true' || $dbSsl === true || $dbSsl === '1') {
             $options[PDO::MYSQL_ATTR_SSL_CA] = true;
             $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = false;
         }
@@ -71,8 +90,8 @@ class Database {
             $this->connection = new PDO($dsn, $username, $password, $options);
         } catch (PDOException $e) {
             // Log del error con información útil pero sin exponer credenciales
-            error_log("Error de conexión a la base de datos: " . $e->getMessage());
-            throw new Exception("Error de conexión a la base de datos. Verifica la configuración.");
+            error_log("Error de conexión a la base de datos. Host: {$host}, DB: {$dbname}, Error: " . $e->getMessage());
+            throw new Exception("Error de conexión a la base de datos. Verifica la configuración de las variables de entorno.");
         }
     }
     

@@ -42,14 +42,32 @@ $dbFile = __DIR__ . '/database.php';
 if (!file_exists($dbFile)) {
     $dbFile = __DIR__ . '/../config/database.php';
 }
-if (!file_exists($dbFile)) {
-    // Log del error para debug
-    error_log("ERROR: database.php no encontrado en " . __DIR__ . "/database.php ni en " . __DIR__ . "/../config/database.php");
-    http_response_code(500);
-    echo json_encode(['error' => 'Error de configuración del servidor']);
-    exit();
+
+// Si existe el archivo, cargarlo; si no, verificar variables de entorno
+if (file_exists($dbFile)) {
+    require_once $dbFile;
+} else {
+    // Si no hay archivo pero hay variables de entorno, definir la clase Database aquí
+    // Esto permite que funcione en Render sin necesidad del archivo físico
+    $hasEnvVars = getenv('DB_HOST') || getenv('DATABASE_URL') || getenv('DATABASE_HOST');
+    
+    if ($hasEnvVars) {
+        // Si hay variables de entorno, definir la clase Database inline
+        if (!class_exists('Database')) {
+            require_once __DIR__ . '/database.php';
+        }
+    } else {
+        // Solo fallar si no hay variables de entorno ni archivo
+        error_log("ERROR: database.php no encontrado y no hay variables de entorno configuradas");
+        http_response_code(500);
+        echo json_encode([
+            'error' => 'Error de configuración del servidor',
+            'message' => 'No se encontró database.php ni variables de entorno de base de datos configuradas',
+            'hint' => 'Configura las variables de entorno DB_HOST, DB_NAME, DB_USER, DB_PASSWORD en Render'
+        ]);
+        exit();
+    }
 }
-require_once $dbFile;
 
 // Función para enviar respuestas JSON
 function sendResponse($data, $statusCode = 200) {
