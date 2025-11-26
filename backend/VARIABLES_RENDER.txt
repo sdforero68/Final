@@ -1,0 +1,20 @@
+# Variables de Despliegue para Render
+# Copia estas variables una por una en Render Dashboard → Environment
+
+DB_HOST=sql10.freesqldatabase.com
+DB_PORT=3306
+DB_NAME=sql10809318
+DB_USER=sql10809318
+DB_PASSWORD=t3qD3KjUSe
+DB_SSL=false
+PORT=10000
+
+# INSTRUCCIONES:
+# 1. Ve a Render Dashboard
+# 2. Selecciona tu servicio backend
+# 3. Ve a Settings → Environment
+# 4. Haz clic en "Add Environment Variable"
+# 5. Copia cada variable (clave = valor) una por una
+# 6. Guarda todos los cambios
+# 7. Espera 2-3 minutos a que Render reinicie
+
