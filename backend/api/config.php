@@ -37,33 +37,55 @@ ini_set('log_errors', 1);
 // Zona horaria
 date_default_timezone_set('America/Bogota');
 
-// Incluir configuración de base de datos - FORZAR desde api/
-$dbFile = __DIR__ . '/database.php';
-if (!file_exists($dbFile)) {
-    $dbFile = __DIR__ . '/../config/database.php';
+// Incluir configuración de base de datos
+// Intentar múltiples ubicaciones posibles
+$dbFiles = [
+    __DIR__ . '/database.php',           // api/database.php (prioridad 1)
+    __DIR__ . '/../config/database.php', // config/database.php (prioridad 2)
+];
+
+$dbFile = null;
+foreach ($dbFiles as $file) {
+    if (file_exists($file)) {
+        $dbFile = $file;
+        break;
+    }
 }
 
-// Si existe el archivo, cargarlo; si no, verificar variables de entorno
-if (file_exists($dbFile)) {
+// Cargar database.php si existe
+if ($dbFile) {
     require_once $dbFile;
 } else {
-    // Si no hay archivo pero hay variables de entorno, definir la clase Database aquí
-    // Esto permite que funcione en Render sin necesidad del archivo físico
+    // Si no existe el archivo, verificar si hay variables de entorno
     $hasEnvVars = getenv('DB_HOST') || getenv('DATABASE_URL') || getenv('DATABASE_HOST');
     
     if ($hasEnvVars) {
-        // Si hay variables de entorno, definir la clase Database inline
-        if (!class_exists('Database')) {
+        // Si hay variables de entorno, cargar database.php desde api/
+        // Si no existe, la clase Database debería manejar variables de entorno
+        if (file_exists(__DIR__ . '/database.php')) {
             require_once __DIR__ . '/database.php';
+        } else {
+            // Si no existe database.php, definir la clase Database aquí
+            if (!class_exists('Database')) {
+                require_once __DIR__ . '/../config/database.php';
+            }
         }
     } else {
         // Solo fallar si no hay variables de entorno ni archivo
         error_log("ERROR: database.php no encontrado y no hay variables de entorno configuradas");
+        error_log("Buscado en: " . implode(', ', $dbFiles));
         http_response_code(500);
         echo json_encode([
             'error' => 'Error de configuración del servidor',
             'message' => 'No se encontró database.php ni variables de entorno de base de datos configuradas',
-            'hint' => 'Configura las variables de entorno DB_HOST, DB_NAME, DB_USER, DB_PASSWORD en Render'
+            'hint' => 'Configura las variables de entorno DB_HOST, DB_NAME, DB_USER, DB_PASSWORD en Render',
+            'debug' => [
+                'files_checked' => $dbFiles,
+                'env_vars' => [
+                    'DB_HOST' => getenv('DB_HOST') ? 'SET' : 'NOT SET',
+                    'DATABASE_URL' => getenv('DATABASE_URL') ? 'SET' : 'NOT SET',
+                ]
+            ]
         ]);
         exit();
     }

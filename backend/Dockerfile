@@ -18,18 +18,18 @@ RUN if [ -f composer.json ]; then composer install --no-dev --optimize-autoloade
 # Copiar TODO desde el directorio actual (backend/)
 COPY . .
 
-# GARANTIZAR que database.php esté en api/ 
-RUN if [ ! -f /var/www/html/api/database.php ] && [ -f /var/www/html/config/database.php ]; then \
+# GARANTIZAR que database.php esté en api/ (siempre copiar desde config/ a api/)
+RUN if [ -f /var/www/html/config/database.php ]; then \
         cp /var/www/html/config/database.php /var/www/html/api/database.php && \
         echo "✅ database.php copiado de config/ a api/"; \
+    elif [ -f /var/www/html/api/database.php ]; then \
+        echo "✅ database.php ya existe en api/"; \
+    else \
+        echo "⚠️ ADVERTENCIA: database.php no encontrado. Se usará configuración de variables de entorno."; \
     fi
 
-# Verificar que database.php existe (usar el de api/ o config/)
-RUN if [ ! -f /var/www/html/api/database.php ] && [ ! -f /var/www/html/config/database.php ]; then \
-        echo "⚠️ ADVERTENCIA: database.php no encontrado. Se usará configuración de variables de entorno."; \
-    else \
-        echo "✅ database.php encontrado"; \
-    fi
+# Verificar que database.php existe en api/
+RUN ls -la /var/www/html/api/database.php 2>/dev/null && echo "✅ database.php verificado en api/" || echo "⚠️ database.php no está en api/ (usará variables de entorno)"
 
 # Asegurar que Composer instale dependencias después de copiar todo
 RUN if [ -f composer.json ]; then composer install --no-dev --optimize-autoloader --no-interaction || true; fi
