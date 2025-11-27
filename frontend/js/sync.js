@@ -11,8 +11,9 @@ import { getCart, saveCart, getCartItemsCount, CART_STORAGE_KEY } from './main.j
 
 /**
  * Actualiza el badge del carrito en todas las páginas
+ * @param {boolean} skipEvent - Si es true, no dispara el evento cartUpdated (para evitar recursión)
  */
-export function updateCartBadge() {
+export function updateCartBadge(skipEvent = false) {
   const count = getCartItemsCount();
   const badges = Array.from(document.querySelectorAll('.cart-badge, #cart-badge'));
   
@@ -25,10 +26,12 @@ export function updateCartBadge() {
     }
   });
   
-  // Disparar evento personalizado para que otras partes del código se actualicen
-  window.dispatchEvent(new CustomEvent('cartUpdated', { 
-    detail: { count, items: getCart() } 
-  }));
+  // Disparar evento personalizado solo si no se está saltando (para evitar recursión)
+  if (!skipEvent) {
+    window.dispatchEvent(new CustomEvent('cartUpdated', { 
+      detail: { count, items: getCart() } 
+    }));
+  }
 }
 
 /**
@@ -299,8 +302,9 @@ export function initSync() {
   });
   
   // Escuchar eventos personalizados de actualización de carrito
+  // Usar skipEvent=true para evitar recursión infinita
   window.addEventListener('cartUpdated', () => {
-    updateCartBadge();
+    updateCartBadge(true);
   });
   
   // Configurar botón de usuario

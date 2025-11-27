@@ -1,17 +1,20 @@
 /**
  * Servicio del carrito
- * NOTA: El backend no tiene endpoints de carrito, se usa localStorage
+ * Usa la API del backend cuando el usuario está autenticado
  */
 
-const CART_STORAGE_KEY = 'app_cart';
+import { apiGet, apiPost, apiPut, apiDelete, apiRequest } from './config.js';
 
 /**
- * Obtener el carrito del usuario (desde localStorage)
+ * Obtener el carrito del usuario desde la API
  */
 export async function getCart() {
     try {
-        const cartStr = localStorage.getItem(CART_STORAGE_KEY);
-        return cartStr ? JSON.parse(cartStr) : [];
+        const response = await apiGet('cart/get.php');
+        if (response.success && response.data) {
+            return response.data;
+        }
+        return [];
     } catch (error) {
         console.error('Error obteniendo carrito:', error);
         return [];
@@ -19,36 +22,63 @@ export async function getCart() {
 }
 
 /**
- * Agregar producto al carrito (usando localStorage)
+ * Agregar producto al carrito
  */
 export async function addToCart(productId, quantity = 1) {
-    // El carrito se maneja con localStorage, no con API
-    // Esta función se mantiene por compatibilidad pero no hace llamadas API
-    return { success: true, message: 'Carrito manejado localmente' };
+    try {
+        const response = await apiPost('cart/add.php', {
+            product_id: productId,
+            quantity: quantity
+        });
+        return response;
+    } catch (error) {
+        console.error('Error agregando al carrito:', error);
+        throw error;
+    }
 }
 
 /**
- * Actualizar cantidad de un producto en el carrito (usando localStorage)
+ * Actualizar cantidad de un producto en el carrito
  */
 export async function updateCartItem(productId, quantity) {
-    // El carrito se maneja con localStorage, no con API
-    return { success: true, message: 'Carrito manejado localmente' };
+    try {
+        const response = await apiPut('cart/update.php', {
+            product_id: productId,
+            quantity: quantity
+        });
+        return response;
+    } catch (error) {
+        console.error('Error actualizando carrito:', error);
+        throw error;
+    }
 }
 
 /**
- * Eliminar producto del carrito (usando localStorage)
+ * Eliminar producto del carrito
  */
 export async function removeFromCart(productId) {
-    // El carrito se maneja con localStorage, no con API
-    return { success: true, message: 'Carrito manejado localmente' };
+    try {
+        // DELETE con query string
+        const response = await apiRequest(`cart/remove.php?product_id=${encodeURIComponent(productId)}`, {
+            method: 'DELETE'
+        });
+        return response;
+    } catch (error) {
+        console.error('Error eliminando del carrito:', error);
+        throw error;
+    }
 }
 
 /**
- * Vaciar el carrito (usando localStorage)
+ * Vaciar el carrito
  */
 export async function clearCart() {
-    // El carrito se maneja con localStorage, no con API
-    localStorage.removeItem(CART_STORAGE_KEY);
-    return { success: true, message: 'Carrito vaciado' };
+    try {
+        const response = await apiPost('cart/clear.php', {});
+        return response;
+    } catch (error) {
+        console.error('Error vaciando carrito:', error);
+        throw error;
+    }
 }
 

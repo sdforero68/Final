@@ -7,122 +7,63 @@ import { apiGet, apiPost } from './config.js';
 
 /**
  * Crear un nuevo pedido
- * Usa POST /orders.php
+ * Usa POST /orders/create.php
  */
 export async function createOrder(orderData) {
     try {
-        const response = await apiPost('orders.php', {
+        const response = await apiPost('orders/create.php', {
             delivery_method: orderData.deliveryMethod || orderData.delivery_method,
             payment_method: orderData.paymentMethod || orderData.payment_method,
-            customer_info: orderData.customerInfo || orderData.customer_info,
-            items: orderData.items || [],
-            total: orderData.total || 0,
-            subtotal: orderData.subtotal || 0,
-            deliveryFee: orderData.deliveryFee || 0
+            customer_info: orderData.customerInfo || orderData.customer_info
         });
         
-        if (response.success) {
-            return response.data || response.order;
+        if (response.success && response.data) {
+            return response.data.order || response.data;
         }
         throw new Error(response.error || response.message || 'Error al crear pedido');
     } catch (error) {
-        // Si falla la API, usar localStorage como fallback
-        console.warn('Error creando pedido en API, usando localStorage:', error);
-        return createOrderLocal(orderData);
+        console.error('Error creando pedido:', error);
+        throw error;
     }
 }
 
 /**
- * Obtener todos los pedidos del usuario
- * Usa GET /orders.php?userId=X
+ * Obtener todos los pedidos del usuario autenticado
+ * Usa GET /orders/list.php
  */
-export async function getOrders(userId = null) {
+export async function getOrders() {
     try {
-        // Si no hay userId, intentar obtenerlo del usuario logueado
-        if (!userId) {
-            const userStr = localStorage.getItem('user') || localStorage.getItem('current_user');
-            if (userStr) {
-                try {
-                    const user = JSON.parse(userStr);
-                    userId = user.id || user.email;
-                } catch (e) {
-                    // Ignorar error
-                }
-            }
+        const response = await apiGet('orders/list.php');
+        
+        if (response.success && response.data) {
+            return response.data;
         }
         
-        if (!userId) {
-            // Si no hay userId, devolver vacío
-            return [];
-        }
-        
-        const response = await apiGet(`orders.php?userId=${encodeURIComponent(userId)}`);
-        
-        if (response.success) {
-            return response.data || response.orders || [];
-        }
-        
-        throw new Error(response.error || response.message || 'Error al obtener pedidos');
+        return [];
     } catch (error) {
-        // Si falla la API, usar localStorage como fallback
-        console.warn('Error obteniendo pedidos de API, usando localStorage:', error);
-        return getOrdersLocal(userId);
+        console.error('Error obteniendo pedidos:', error);
+        // Si no está autenticado o hay error, devolver vacío
+        return [];
     }
 }
 
 /**
  * Obtener un pedido por ID
- * El backend no tiene este endpoint, usar localStorage
+ * Usa GET /orders/get.php?id=xxx
  */
 export async function getOrder(orderId) {
-    // El backend no tiene endpoint para obtener un pedido por ID
-    // Usar localStorage
-    return getOrderLocal(orderId);
-}
-
-/**
- * Funciones de fallback usando localStorage
- */
-function createOrderLocal(orderData) {
-    const ORDERS_STORAGE_KEY = 'app_orders';
-    const ordersStr = localStorage.getItem(ORDERS_STORAGE_KEY);
-    const orders = ordersStr ? JSON.parse(ordersStr) : [];
-    
-    const orderId = 'order_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-    const order = {
-        ...orderData,
-        id: orderId,
-        createdAt: new Date().toISOString(),
-        status: 'pendiente'
-    };
-    
-    orders.push(order);
-    localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(orders));
-    
-    return order;
-}
-
-function getOrdersLocal(userId) {
-    const ORDERS_STORAGE_KEY = 'app_orders';
-    const ordersStr = localStorage.getItem(ORDERS_STORAGE_KEY);
-    const allOrders = ordersStr ? JSON.parse(ordersStr) : [];
-    
-    if (!userId) {
-        return allOrders;
+    try {
+        const response = await apiGet(`orders/get.php?id=${encodeURIComponent(orderId)}`);
+        
+        if (response.success && response.data) {
+            return response.data;
+        }
+        
+        throw new Error(response.error || 'Pedido no encontrado');
+    } catch (error) {
+        console.error('Error obteniendo pedido:', error);
+        throw error;
     }
-    
-    return allOrders.filter(order => 
-        order.userId === userId || 
-        order.customer_info?.email === userId ||
-        order.customerInfo?.email === userId
-    );
 }
 
-function getOrderLocal(orderId) {
-    const ORDERS_STORAGE_KEY = 'app_orders';
-    const ordersStr = localStorage.getItem(ORDERS_STORAGE_KEY);
-    const allOrders = ordersStr ? JSON.parse(ordersStr) : [];
-    
-    return allOrders.find(order => order.id === orderId) || null;
-}
 

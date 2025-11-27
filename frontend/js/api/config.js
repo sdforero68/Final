@@ -103,5 +103,5 @@ async function apiDelete(endpoint) {
     return apiRequest(endpoint, { method: 'DELETE' });
 }
 
-export { apiGet, apiPost, apiPut, apiDelete, API_BASE_URL };
+  export { apiGet, apiPost, apiPut, apiDelete, apiRequest, API_BASE_URL };
 
