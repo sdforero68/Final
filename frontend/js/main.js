@@ -686,25 +686,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const apiProducts = await getProducts();
         const apiCategories = await getCategories();
         
-        if (apiProducts && apiProducts.length > 0) {
+        // Si la API devuelve productos, usarlos; si no, usar estáticos
+        if (apiProducts && Array.isArray(apiProducts) && apiProducts.length > 0) {
           products = apiProducts;
           console.log(`✅ Productos cargados desde API: ${products.length}`);
         } else {
-          // Fallback a productos estáticos
+          // Fallback a productos estáticos si la API está vacía o falla
           products = staticProducts;
-          console.log('⚠️ Usando productos estáticos (fallback)');
+          console.log(`⚠️ Usando productos estáticos (fallback): ${products.length} productos`);
         }
         
-        if (apiCategories && apiCategories.length > 0) {
+        // Si la API devuelve categorías, usarlas; si no, usar estáticas
+        if (apiCategories && Array.isArray(apiCategories) && apiCategories.length > 0) {
           categories = apiCategories;
           console.log(`✅ Categorías cargadas desde API: ${categories.length}`);
         } else {
           // Fallback a categorías estáticas
           categories = staticCategories;
-          console.log('⚠️ Usando categorías estáticas (fallback)');
+          console.log(`⚠️ Usando categorías estáticas (fallback): ${categories.length} categorías`);
         }
         
-        // Renderizar después de cargar
+        // Renderizar después de cargar (siempre que tengamos productos)
         if (products && products.length > 0) {
           renderFilters();
           renderGrid();
@@ -716,14 +718,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       } catch (error) {
         console.error('Error cargando productos desde API:', error);
-        // Fallback a productos estáticos
+        // Fallback a productos estáticos en caso de error
         products = staticProducts;
         categories = staticCategories;
-        console.log('⚠️ Usando productos estáticos debido a error en API');
+        console.log(`⚠️ Usando productos estáticos debido a error en API: ${products.length} productos`);
         
         if (products && products.length > 0) {
           renderFilters();
           renderGrid();
+        } else {
+          console.error('Error: No hay productos disponibles (ni de API ni estáticos)');
+          if (gridEl) {
+            gridEl.innerHTML = '<div class="text-center py-16"><p class="text-xl">Error al cargar los productos. Por favor, recarga la página.</p></div>';
+          }
         }
       }
     }
