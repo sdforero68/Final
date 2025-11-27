@@ -59,12 +59,17 @@ const getCategoryImage = (category) => {
 // Función para resolver imagen de producto (exportable)
 export const resolveProductImage = (product) => {
   if (!product?.image) {
+    // Si no hay imagen pero hay code (de la API), intentar usar el code
+    if (product?.code) {
+      return resolveAssetPath(`Catálogo/${product.code}.jpg`);
+    }
     if (product?.id) {
       return resolveAssetPath(`Catálogo/${product.id}.jpg`);
     }
     return getCategoryImage(product?.category);
   }
 
+  // Si es una URL completa (http/https), retornarla directamente
   if (typeof product.image === 'string' && product.image.startsWith('http')) {
     return product.image;
   }
@@ -74,11 +79,26 @@ export const resolveProductImage = (product) => {
     return getCategoryImage(product?.category);
   }
 
-  // Si la ruta ya incluye un directorio (como Catálogo/ o products/), usar directamente
-  const hasDirectory = imagePath.includes('/');
-  const normalized = hasDirectory
-    ? imagePath
-    : `products/${imagePath}`;
+  // Si la ruta viene de la base de datos con /assets/images/ al inicio, removerlo
+  let normalized = imagePath;
+  if (normalized.startsWith('/assets/images/')) {
+    normalized = normalized.replace('/assets/images/', '');
+  } else if (normalized.startsWith('assets/images/')) {
+    normalized = normalized.replace('assets/images/', '');
+  }
+
+  // Si la ruta ya incluye un directorio (como Catálogo/), usar directamente
+  const hasDirectory = normalized.includes('/');
+  if (!hasDirectory) {
+    // Si no tiene directorio, intentar usar el code o id del producto
+    if (product?.code) {
+      normalized = `Catálogo/${product.code}.jpg`;
+    } else if (product?.id) {
+      normalized = `Catálogo/${product.id}.jpg`;
+    } else {
+      normalized = `products/${normalized}`;
+    }
+  }
 
   return resolveAssetPath(normalized);
 };
