@@ -44,8 +44,20 @@ export async function addToCart(product) {
     
     if (token) {
       // Usar API si está autenticado
+      // Priorizar code sobre id, ya que la API usa code como identificador principal
+      const productId = product.code || product.id;
+      
+      if (!productId) {
+        console.error('Producto sin ID o código:', product);
+        throw new Error('El producto no tiene un identificador válido');
+      }
+      
+      console.log('Agregando producto al carrito (API):', { productId, product });
+      
       const { addToCart: apiAddToCart } = await import('./api/cart.js');
-      await apiAddToCart(product.id || product.code, 1);
+      const result = await apiAddToCart(productId, 1);
+      
+      console.log('Producto agregado exitosamente:', result);
       
       // Actualizar carrito local desde la API
       await syncCartFromAPI();
@@ -85,28 +97,52 @@ export async function addToCart(product) {
     }
   } catch (error) {
     console.error('Error agregando al carrito:', error);
-    // Fallback a localStorage
-    const cart = getCart();
-    const existingItem = cart.find(item => item.id === product.id);
+    console.error('Detalles del error:', {
+      message: error.message,
+      stack: error.stack,
+      product: product
+    });
     
-    if (existingItem) {
-      existingItem.quantity += 1;
-    } else {
-      cart.push({
-        id: product.id || product.code,
-        name: product.name,
-        price: product.price,
-        quantity: 1,
-        image: product.image,
-        category: product.category,
-        description: product.description
-      });
+    // Si el error es de autenticación, no hacer fallback a localStorage
+    if (error.message && (error.message.includes('401') || error.message.includes('No autenticado'))) {
+      if (window.toast) {
+        window.toast.error('Por favor inicia sesión para agregar productos al carrito');
+      }
+      throw error;
     }
-    saveCart(cart);
-    updateCartBadge();
     
-    if (window.toast) {
-      window.toast.success(`${product.name} agregado al carrito`);
+    // Fallback a localStorage solo si no está autenticado o si hay un error de red
+    const token = localStorage.getItem('accessToken') || localStorage.getItem('current_session');
+    if (!token) {
+      const cart = getCart();
+      const productId = product.code || product.id;
+      const existingItem = cart.find(item => item.id === productId || item.id === product.id);
+      
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        cart.push({
+          id: productId || product.id,
+          name: product.name,
+          price: product.price,
+          quantity: 1,
+          image: product.image,
+          category: product.category,
+          description: product.description
+        });
+      }
+      saveCart(cart);
+      updateCartBadge();
+      
+      if (window.toast) {
+        window.toast.success(`${product.name} agregado al carrito`);
+      }
+    } else {
+      // Si está autenticado pero falló la API, mostrar error
+      if (window.toast) {
+        window.toast.error(`Error al agregar ${product.name} al carrito. Por favor intenta de nuevo.`);
+      }
+      throw error;
     }
   }
 }
@@ -117,15 +153,25 @@ export async function addToCart(product) {
 async function syncCartFromAPI() {
   try {
     const token = localStorage.getItem('accessToken') || localStorage.getItem('current_session');
-    if (!token) return;
+    if (!token) {
+      console.log('No hay token, saltando sincronización de carrito');
+      return;
+    }
     
+    console.log('Sincronizando carrito desde API...');
     const { getCart: apiGetCart } = await import('./api/cart.js');
     const apiCart = await apiGetCart();
     
+    console.log('Carrito sincronizado desde API:', apiCart);
+    
     // Guardar en localStorage para compatibilidad
     saveCart(apiCart);
+    
+    // Actualizar badge después de sincronizar
+    updateCartBadge();
   } catch (error) {
     console.error('Error sincronizando carrito:', error);
+    // No lanzar error, solo loguear para no interrumpir el flujo
   }
 }
 

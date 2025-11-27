@@ -1,5 +1,10 @@
-import { products, categories } from './products.js';
+// Importar productos estáticos como fallback
+import { products as staticProducts, categories as staticCategories } from './products.js';
 import { initToaster } from './UI/toaster.js';
+
+// Variables globales para productos y categorías (se cargarán desde la API)
+let products = [];
+let categories = [];
 
 // Sistema de carrito con localStorage (scope global)
 const CART_STORAGE_KEY = 'app_cart';
@@ -672,17 +677,59 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // Verificar que products y categories estén disponibles
-    if (!products || products.length === 0) {
-      console.error('Error: No se pudieron cargar los productos');
-      if (gridEl) {
-        gridEl.innerHTML = '<div class="text-center py-16"><p class="text-xl">Error al cargar los productos. Por favor, recarga la página.</p></div>';
+    // Cargar productos desde la API
+    async function loadProducts() {
+      try {
+        console.log('Cargando productos desde la API...');
+        const { getProducts, getCategories } = await import('./api/products.js');
+        
+        const apiProducts = await getProducts();
+        const apiCategories = await getCategories();
+        
+        if (apiProducts && apiProducts.length > 0) {
+          products = apiProducts;
+          console.log(`✅ Productos cargados desde API: ${products.length}`);
+        } else {
+          // Fallback a productos estáticos
+          products = staticProducts;
+          console.log('⚠️ Usando productos estáticos (fallback)');
+        }
+        
+        if (apiCategories && apiCategories.length > 0) {
+          categories = apiCategories;
+          console.log(`✅ Categorías cargadas desde API: ${categories.length}`);
+        } else {
+          // Fallback a categorías estáticas
+          categories = staticCategories;
+          console.log('⚠️ Usando categorías estáticas (fallback)');
+        }
+        
+        // Renderizar después de cargar
+        if (products && products.length > 0) {
+          renderFilters();
+          renderGrid();
+        } else {
+          console.error('Error: No se pudieron cargar los productos');
+          if (gridEl) {
+            gridEl.innerHTML = '<div class="text-center py-16"><p class="text-xl">Error al cargar los productos. Por favor, recarga la página.</p></div>';
+          }
+        }
+      } catch (error) {
+        console.error('Error cargando productos desde API:', error);
+        // Fallback a productos estáticos
+        products = staticProducts;
+        categories = staticCategories;
+        console.log('⚠️ Usando productos estáticos debido a error en API');
+        
+        if (products && products.length > 0) {
+          renderFilters();
+          renderGrid();
+        }
       }
-    } else {
-      console.log(`Productos cargados: ${products.length}`);
-      renderFilters();
-      renderGrid();
     }
+    
+    // Cargar productos al inicio
+    loadProducts();
   } else {
     console.warn('Elementos del catálogo no encontrados (catalog-grid o catalog-filters)');
   }
